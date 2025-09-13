@@ -1,0 +1,161 @@
+:root {
+    /* === TYPOGRAPHIE - DESKTOP === */
+    --font-size-h1: 68px;
+    --font-size-h2: 58px;
+    --font-size-h3: 40px;
+    --font-size-h4: 32px;
+    --font-size-h5: 28px;
+    --font-size-body-large: 24px;
+    --font-size-body-medium: 18px;
+    --font-size-body-small: 14px;
+
+    --line-height-h1: 108%;
+    --line-height-h2: 108%;
+    --line-height-h3: 108%;
+    --line-height-h4: 108%;
+    --line-height-h5: 108%;
+    --line-height-body-large: 130%;
+    --line-height-body-medium: 150%;
+    --line-height-body-small: 130%;
+
+    /* === ESPACEMENT === */
+    --space-01: 4px;
+    --space-02: 8px;
+    --space-03: 12px;
+    --space-04: 16px;
+    --space-05: 24px;
+    --space-06: 32px;
+    --space-07: 48px;
+    --space-08: 64px;
+    --space-09: 96px;
+
+    /* === COULEURS PRINCIPALES === */
+    --color-brand: #EF642E;
+    --color-text: #171917;
+    --color-text-secondary: #767C76;
+    --color-text-light: #A6ACA6;
+    --color-text-contrast: #FFF;
+
+    /* === COULEURS DE FONDS === */
+    --color-background: #F7F7F7;
+    --color-background-strong: #F2F2F2;
+    --color-background-neutral: #FFFFFF;
+    --color-background-contrast: #222825;
+}
+
+/* === RESPONSIVE - TABLET === */
+@media (max-width: 1024px) {
+    :root {
+        --font-size-h1: 54px;
+        --font-size-h2: 42px;
+        --font-size-h3: 30px;
+        --font-size-h4: 28px;
+        --font-size-h5: 22px;
+        --font-size-body-large: 20px;
+    }
+}
+
+/* === RESPONSIVE - MOBILE === */
+@media (max-width: 768px) {
+    :root {
+        --font-size-h1: 42px;
+        --font-size-h2: 32px;
+        --font-size-h3: 28px;
+        --font-size-h4: 24px;
+        --font-size-h5: 20px;
+        --font-size-body-large: 18px;
+        --font-size-body-medium: 16px;
+        --font-size-body-small: 12px;
+
+
+
+        --space-05: 16px;
+        --space-06: 24px;
+        --space-07: 32px;
+        --space-08: 48px;
+        --space-09: 64px;
+    }
+}
+
+/* === FONT FACES === */
+@font-face {
+    font-family: 'Perfectly Nineties';
+    src: url('../fonts/PerfectlyNineties-Regular.woff2') format('woff2');
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'Neue Montreal';
+    src: url('../fonts/NeueMontreal-Regular.woff2') format('woff2');
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'Space Mono';
+    src: url('../fonts/SpaceMono-Regular.woff2') format('woff2');
+    font-weight: 400;
+}
+
+/* === CLASSES UTILITAIRES === */
+.h1 {
+    font-family: 'Perfectly Nineties', serif;
+    font-size: var(--font-size-h1);
+    line-height: var(--line-height-h1);
+    font-weight: 400;
+}
+
+.h2 {
+    font-family: 'Perfectly Nineties', serif;
+    font-size: var(--font-size-h2);
+    line-height: var(--line-height-h2);
+    font-weight: 400;
+}
+
+.h3 {
+    font-family: 'Perfectly Nineties', serif;
+    font-size: var(--font-size-h3);
+    line-height: var(--line-height-h3);
+    font-weight: 400;
+}
+
+.h4 {
+    font-family: 'Perfectly Nineties', serif;
+    font-size: var(--font-size-h4);
+    line-height: var(--line-height-h4);
+    font-weight: 400;
+}
+
+.h5 {
+    font-family: 'Perfectly Nineties', serif;
+    font-size: var(--font-size-h5);
+    line-height: var(--line-height-h5);
+    font-weight: 400;
+}
+
+.body-large {
+    font-family: 'Neue Montreal', sans-serif;
+    font-size: var(--font-size-body-large);
+    line-height: var(--line-height-body-large);
+    font-weight: 400;
+}
+
+.body-medium {
+    font-family: 'Neue Montreal', sans-serif;
+    font-size: var(--font-size-body-medium);
+    line-height: var(--line-height-body-medium);
+    font-weight: 400;
+}
+
+.body-small {
+    font-family: 'Neue Montreal', sans-serif;
+    font-size: var(--font-size-body-small);
+    line-height: var(--line-height-body-small);
+    font-weight: 400;
+}
+
+.body-mono {
+    font-family: 'Space Mono', monospace;
+    font-size: var(--font-size-body-medium);
+    line-height: var(--line-height-body-medium);
+    font-weight: 400;
+}
