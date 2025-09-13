@@ -41,6 +41,11 @@
     --color-background-strong: #F2F2F2;
     --color-background-neutral: #FFFFFF;
     --color-background-contrast: #222825;
+
+    /* === VARIABLES DE GRILLE === */
+    --grid-columns: 8;
+    --grid-margin: 16px;
+    --grid-gutter: 16px;
 }
 
 /* === RESPONSIVE - TABLET === */
@@ -67,13 +72,16 @@
         --font-size-body-medium: 16px;
         --font-size-body-small: 12px;
 
-
-
         --space-05: 16px;
         --space-06: 24px;
         --space-07: 32px;
         --space-08: 48px;
         --space-09: 64px;
+
+        /* Variables de grille mobile */
+        --grid-columns: 4;
+        --grid-margin: 8px;
+        --grid-gutter: 16px;
     }
 }
 
@@ -96,7 +104,136 @@
     font-weight: 400;
 }
 
-/* === CLASSES UTILITAIRES === */
+/* Reset CSS global */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* user-select: none; */
+  /* -webkit-tap-highlight-color: transparent; */
+}
+
+html,
+body {
+  overscroll-behavior: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+
+/* === SYSTÈME DE GRILLE === */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-columns), 1fr);
+    gap: var(--grid-gutter);
+    padding: 0 var(--grid-margin);
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+
+
+
+/* === TOGGLE DE GRILLE === */
+.grid-toggle {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    width: 32px;
+    height: 32px;
+    background: var(--color-background-contrast);
+    border: 1px solid var(--color-text-light);
+    border-radius: 4px;
+    cursor: pointer;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    opacity: 0.3;
+}
+
+.grid-toggle:hover {
+    opacity: 0.8;
+    transform: scale(1.05);
+}
+
+.grid-toggle.active {
+    background: var(--color-brand);
+    border-color: var(--color-brand);
+    opacity: 1;
+}
+
+.grid-toggle::before {
+    content: '';
+    width: 12px;
+    height: 12px;
+    background-image: 
+        linear-gradient(to right, var(--color-text-contrast) 2px, transparent 2px),
+        linear-gradient(to bottom, var(--color-text-contrast) 2px, transparent 2px);
+    background-size: 4px 4px;
+    background-repeat: repeat;
+}
+
+/* === OVERLAY DE GRILLE === */
+.grid-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 9998;
+    display: none;
+}
+
+.grid-overlay.visible {
+    display: block;
+}
+
+.grid-overlay-inner {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-columns), 1fr);
+    gap: var(--grid-gutter);
+    padding: 0 var(--grid-margin);
+    height: 100vh;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.grid-overlay-column {
+    background: rgba(239, 100, 46, 0.1);
+    border: 1px solid rgba(239, 100, 46, 0.2);
+}
+
+@media (max-width: 768px) {
+    .grid-toggle {
+        bottom: 12px;
+        left: 12px;
+        width: 28px;
+        height: 28px;
+    }
+    
+    .grid-toggle::before {
+        width: 10px;
+        height: 10px;
+        background-size: 3px 3px;
+    }
+}
+
+/* === CLASSES TYPOGRAPHIQUES === */
 .h1 {
     font-family: 'Perfectly Nineties', serif;
     font-size: var(--font-size-h1);
