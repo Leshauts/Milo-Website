@@ -1,15 +1,12 @@
 <template>
-  <div class="section-title" :class="{ 'section-title--main': isMain }">
-    <div class="section-title__tag" :class="tagClass">
+  <div class="section-title">
+    <div class="section-title__tag body-small">
       {{ tag }}
     </div>
-    <h1 v-if="isMain" class="section-title__title h1">
-      {{ title }}
-    </h1>
-    <h2 v-else class="section-title__title h2">
+    <h2 class="section-title__title h2">
       {{ title }}
     </h2>
-    <p v-if="paragraph" class="section-title__paragraph" :class="paragraphClass">
+    <p v-if="paragraph" class="section-title__paragraph body-medium">
       {{ paragraph }}
     </p>
   </div>
@@ -30,22 +27,6 @@ export default {
     paragraph: {
       type: String,
       default: null
-    },
-    variant: {
-      type: String,
-      default: 'default',
-      validator: (value) => ['default', 'main'].includes(value)
-    }
-  },
-  computed: {
-    isMain() {
-      return this.variant === 'main'
-    },
-    tagClass() {
-      return this.isMain ? 'body-large' : 'body-small'
-    },
-    paragraphClass() {
-      return this.isMain ? 'body-large' : 'body-medium'
     }
   }
 }
@@ -53,11 +34,10 @@ export default {
 
 <style scoped>
 .section-title {
-  grid-column: 3 / -3;
+  grid-column: 2 / -2;
   margin-bottom: var(--space-07);
   text-align: center;
 }
-
 
 .section-title__tag {
   color: var(--color-brand);
@@ -76,8 +56,7 @@ export default {
 
 /* === RESPONSIVE MOBILE === */
 @media (max-width: 768px) {
-  .section-title,
-  .section-title--main {
+  .section-title {
     grid-column: 1 / -1;
   }
 }
