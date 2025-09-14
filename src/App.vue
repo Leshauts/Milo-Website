@@ -1,7 +1,7 @@
 <template>
   <GridToggle @toggle="onGridToggle" />
 
-  <!-- Section principale avec SectionTitle main intégré -->
+  <!-- Section principale avec SectionTitle main intégré et FeatureItems -->
   <SectionCover 
     tag="Meet Milō" 
     title="The all-in-one streaming&nbsp;amplifier"
@@ -71,7 +71,7 @@ export default {
   display: grid;
   grid-template-columns: repeat(var(--grid-columns), 1fr);
   gap: var(--grid-gutter);
-  padding: 0 var(--grid-margin);
+  padding: var(--space-08) var(--grid-margin);
   max-width: 100%;
 }
 </style>

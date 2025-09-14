@@ -15,21 +15,26 @@
     
     <!-- Grid des 8 features -->
     <div class="features-grid">
-      <div class="feature">Feature 1</div>
-      <div class="feature">Feature 2</div>
-      <div class="feature">Feature 3</div>
-      <div class="feature">Feature 4</div>
-      <div class="feature">Feature 5</div>
-      <div class="feature">Feature 6</div>
-      <div class="feature">Feature 7</div>
-      <div class="feature">Feature 8</div>
+      <FeatureItem name="Spotify" />
+      <FeatureItem name="Bluetooth" />
+      <FeatureItem name="Mac Audio" />
+      <FeatureItem name="60 Watts Amplifier" />
+      <FeatureItem name="Multiroom Sync" />
+      <FeatureItem name="Touch Display" />
+      <FeatureItem name="Raspberry Pi" />
+      <FeatureItem name="Open Source" />
     </div>
   </section>
 </template>
 
 <script>
+import FeatureItem from './FeatureItem.vue'
+
 export default {
   name: 'SectionCover',
+  components: {
+    FeatureItem
+  },
   props: {
     tag: {
       type: String,
@@ -53,15 +58,14 @@ export default {
   grid-template-columns: subgrid;
   grid-column: 1 / -1;
   border-radius: var(--border-radius-large);
-  padding: var(--space-08) var(--space-06);
-  margin-bottom: var(--space-06);
-  background: linear-gradient(to bottom, #F1F1F1, #D1DED9);
+  padding: var(--space-09) var(--space-06);
+  background: linear-gradient(to bottom, #F1F1F1, #DADED9);
 }
 
 /* SectionTitle main intégré */
 .section-title-main {
   grid-column: 3 / -3;
-  margin-bottom: var(--space-06);
+  margin-bottom: var(--space-08);
   text-align: center;
 }
 
@@ -85,17 +89,7 @@ export default {
   grid-column: 2 / 8;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-04);
-}
-
-.feature {
-  background-color: var(--color-background-neutral);
-  border-radius: var(--border-radius-small);
-  padding: var(--space-04);
-  text-align: center;
-  font-family: 'Neue Montreal', sans-serif;
-  font-size: var(--font-size-body-small);
-  color: var(--color-text);
+  gap: var(--space-02);
 }
 
 /* === RESPONSIVE MOBILE === */
