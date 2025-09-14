@@ -13,7 +13,7 @@ export default {
     variant: {
       type: String,
       default: 'default',
-      validator: (value) => ['default', 'contrast', 'strong'].includes(value)
+      validator: (value) => ['default', 'contrast'].includes(value)
     }
   },
   computed: {
@@ -37,9 +37,6 @@ export default {
   background-color: var(--color-background-neutral);
 }
 
-.section--strong {
-  background-color: var(--color-background-strong);
-}
 
 .section--contrast {
   background-color: var(--color-background-contrast);
