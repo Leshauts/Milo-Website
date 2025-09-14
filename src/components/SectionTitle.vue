@@ -55,7 +55,7 @@ export default {
 }
 
 /* === RESPONSIVE MOBILE === */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .section-title {
     grid-column: 1 / -1;
   }

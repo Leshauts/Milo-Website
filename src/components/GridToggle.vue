@@ -103,7 +103,7 @@ export default {
     background-repeat: repeat;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .grid-toggle {
         bottom: 12px;
         left: 12px;
@@ -151,7 +151,7 @@ export default {
     border: 1px solid rgba(239, 100, 46, 0.2);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .grid-overlay-inner {
         grid-template-columns: repeat(var(--grid-columns), 1fr);
         gap: 16px;

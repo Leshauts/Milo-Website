@@ -40,6 +40,8 @@
     --color-background: #F7F7F7;
     --color-background-strong: #F2F2F2;
     --color-background-neutral: #FFFFFF;
+    --color-background-neutral-50: #ffffff80;
+
     --color-background-contrast: #222825;
 
     /* === VARIABLES DE GRILLE === */
@@ -68,7 +70,7 @@
 }
 
 /* === RESPONSIVE - MOBILE === */
-@media (max-width: 768px) {
+@media (max-width: 600px) {
     :root {
         --font-size-h1: 42px;
         --font-size-h2: 32px;
