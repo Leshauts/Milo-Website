@@ -52,10 +52,15 @@ export default {
 </script>
 
 <style scoped>
+
+
 .section-title {
   grid-column: 2 / -2;
   margin-bottom: var(--space-07);
   text-align: center;
+}
+.section-title--main {
+  grid-column: 3 / -3;
 }
 
 .section-title__tag {
