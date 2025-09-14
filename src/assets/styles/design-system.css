@@ -125,12 +125,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-#app {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-}
+
 
 
 /* === SYSTÈME DE GRILLE === */

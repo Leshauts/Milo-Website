@@ -1,40 +1,28 @@
 <template>
-  <div id="app">
-    <!-- Exemple d'utilisation de la grille -->
-    <div class="grid-container">
-      <!-- Titre principal sur colonnes 1-5 -->
-      <div class="hero-section">
-        <h1 class="h1">Mon super projet</h1>
-        <p class="body-large">Description du projet sur plusieurs colonnes</p>
-      </div>
-      
-      <!-- Sidebar sur colonnes 6-8 -->
-      <div class="sidebar">
-        <h3 class="h3">Navigation</h3>
-        <p class="body-medium">Menu de navigation</p>
-      </div>
-      
-      <!-- Contenu principal pleine largeur -->
-      <div class="main-content">
-        <h2 class="h2">Contenu principal</h2>
-        <p class="body-medium">Lorem ipsum dolor sit amet...</p>
-      </div>
-      
-      <!-- Deux cartes côte à côte -->
-      <div class="card">
-        <h4 class="h4">Carte 1</h4>
-        <p class="body-small">Contenu de la carte</p>
-      </div>
-      
-      <div class="card">
-        <h4 class="h4">Carte 2</h4>
-        <p class="body-small">Contenu de la carte</p>
-      </div>
-    </div>
-    
-    <!-- Composant toggle -->
-    <GridToggle @toggle="onGridToggle" />
-  </div>
+  <GridToggle @toggle="onGridToggle" />
+  <section class="demo-section">
+    <h1 class="h1">Milo Audio System</h1>
+    <h2 class="h2">Architecture modulaire pour Raspberry Pi</h2>
+    <h3 class="h3">Sources audio multiples</h3>
+    <h4 class="h4">Interface moderne</h4>
+    <h5 class="h5">Performance optimisée</h5>
+
+    <p class="body-large">
+      Milo transforme votre Raspberry Pi en une plateforme audio polyvalente et moderne.
+    </p>
+
+    <p class="body-medium">
+      Gérez facilement vos sources audio : Spotify, Bluetooth, MacOS via Snapcast, et bien plus.
+    </p>
+
+    <p class="body-small">
+      Design système cohérent et responsive pour une expérience utilisateur optimale.
+    </p>
+
+    <p class="body-mono">
+      npm install milo-audio-system
+    </p>
+  </section>
 </template>
 
 <script>
@@ -53,58 +41,26 @@ export default {
 }
 </script>
 
-<style>
-/* Importer le design system */
-@import './assets/styles/design-system.css';
-
-/* Styles spécifiques au layout */
+<style scoped>
 #app {
   min-height: 100vh;
-  background: var(--color-background);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  /* === GRID === */
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), 1fr);
+  gap: var(--grid-gutter);
+  padding: 0 var(--grid-margin);
+  max-width: 100%;
 }
 
-/* === POSITIONNEMENT SUR LA GRILLE === */
-
-/* Hero section : colonnes 1-5 (desktop) / pleine largeur (mobile) */
-.hero-section {
-  grid-column: 1 / 6;
+.demo-section {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--space-08) var(--space-06);
 }
 
-/* Sidebar : colonnes 6-8 (desktop) / pleine largeur (mobile) */
-.sidebar {
-  grid-column: 6 / 9;
-  background: var(--color-background-neutral);
-  padding: var(--space-04);
-  border-radius: 8px;
-}
-
-/* Contenu principal : pleine largeur */
-.main-content {
-  grid-column: 1 / -1;
-  margin: var(--space-06) 0;
-}
-
-/* Cartes : 4 colonnes chacune (desktop) / pleine largeur (mobile) */
-.card {
-  grid-column: span 4;
-  background: var(--color-background-neutral);
-  padding: var(--space-05);
-  border-radius: 8px;
-  border: 1px solid var(--color-background-strong);
-}
-
-/* === RESPONSIVE === */
-@media (max-width: 768px) {
-  .hero-section {
-    grid-column: 1 / -1;
-  }
-  
-  .sidebar {
-    grid-column: 1 / -1;
-  }
-  
-  .card {
-    grid-column: 1 / -1;
-  }
+.demo-section>* {
+  margin-bottom: var(--space-05);
 }
 </style>
