@@ -159,6 +159,10 @@ export default {
         grid-column: 1 / -1;
     }
 
+    .section-cover__image {
+        grid-column: 1 / 9;
+    }
+
     .features-grid {
         grid-column: 1 / -1;
         grid-template-columns: repeat(2, 1fr);
@@ -167,5 +171,13 @@ export default {
     .logo-image {
         height: 32px;
     }
+}
+
+@media (max-width: 600px) {
+
+    .section-cover__image {
+        grid-column: 1 / 5;
+    }
+
 }
 </style>
