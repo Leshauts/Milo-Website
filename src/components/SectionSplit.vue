@@ -1,5 +1,5 @@
 <template>
-  <div class="section-split" :class="sectionClass">
+  <section class="section-split" :class="[sectionClass, variantClass]">
     <!-- Contenu texte -->
     <div class="section-split__content" :class="contentClass">
       <slot name="content" />
@@ -12,7 +12,7 @@
         <div class="illustration-placeholder"></div>
       </slot>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -22,11 +22,19 @@ export default {
     reversed: {
       type: Boolean,
       default: false
+    },
+    variant: {
+      type: String,
+      default: 'default',
+      validator: (value) => ['default', 'contrast'].includes(value)
     }
   },
   computed: {
     sectionClass() {
       return this.reversed ? 'section-split--reversed' : 'section-split--default'
+    },
+    variantClass() {
+      return `section-split--${this.variant}`
     },
     contentClass() {
       return {
@@ -44,16 +52,31 @@ export default {
 
 <style scoped>
 .section-split {
+  /* Configuration de la section avec grille */
+  display: grid;
+  grid-template-columns: subgrid;
   grid-column: 1 / -1;
-  display: flex;
+  border-radius: var(--border-radius-large);
+  
+  /* Configuration du contenu split */
+  grid-template-columns: 1fr 1fr;
   align-items: center;
   gap: var(--grid-gutter);
-  padding: none;
+}
+
+/* === VARIANTES DE SECTION === */
+.section-split--default {
+  background-color: var(--color-background-neutral);
+  color: var(--color-text);
+}
+
+.section-split--contrast {
+  background-color: var(--color-background-contrast);
+  color: var(--color-text-contrast);
 }
 
 /* === CONTENU TEXTE === */
 .section-split__content {
-  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -65,7 +88,6 @@ export default {
 
 /* === ILLUSTRATION === */
 .section-split__illustration {
-  flex: 1;
   aspect-ratio: 1;
   display: flex;
   align-items: center;
@@ -99,8 +121,9 @@ export default {
 /* === RESPONSIVE MOBILE === */
 @media (max-width: 768px) {
   .section-split {
-    flex-direction: column;
+    grid-template-columns: 1fr;
     gap: var(--space-06);
+    padding: var(--space-06) var(--space-04);
   }
 
   .section-split__content,
@@ -112,6 +135,7 @@ export default {
   .section-split__illustration--reversed {
     order: 2 !important;
     max-width: 280px;
+    justify-self: center;
   }
 }
 </style>
