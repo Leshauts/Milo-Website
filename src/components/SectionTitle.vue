@@ -34,7 +34,7 @@ export default {
 
 <style scoped>
 .section-title {
-  grid-column: 2 / -2;
+  grid-column: 3 / -3;
   margin-bottom: var(--space-07);
   text-align: center;
 }

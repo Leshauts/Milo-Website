@@ -7,6 +7,8 @@
   <SectionVideo desktop-video-src="/src/assets/videos/demo-desktop.mp4"
     mobile-video-src="/src/assets/videos/demo-mobile.mp4" :autoplay="false" />
 
+  <SectionAudioSources />
+
   <SectionSplit variant="default">
     <template #content>
       <SectionTitle tag="Features" title="Streaming multiplateforme"
@@ -35,6 +37,7 @@ import SectionTitle from './components/SectionTitle.vue'
 import SectionSplit from './components/SectionSplit.vue'
 import SectionCover from './components/SectionCover.vue'
 import SectionVideo from './components/SectionVideo.vue'
+import SectionAudioSources from './components/SectionAudioSources.vue'
 
 
 export default {
@@ -44,7 +47,9 @@ export default {
     SectionTitle,
     SectionSplit,
     SectionCover,
-    SectionVideo
+    SectionVideo,
+    SectionAudioSources
+
   },
   methods: {
     onGridToggle(isVisible) {
