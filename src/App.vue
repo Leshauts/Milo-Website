@@ -1,18 +1,15 @@
 <template>
   <GridToggle @toggle="onGridToggle" />
 
-  <!-- Section principale avec SectionTitle main intégré et FeatureItems -->
-  <SectionCover 
-    tag="Meet Milō" 
-    title="The all-in-one streaming&nbsp;amplifier"
+  <SectionCover tag="Meet Milō" title="The all-in-one streaming&nbsp;amplifier"
     paragraph="One touch. Any source. Every room. Milō brings together Spotify, Bluetooth, and macOS streaming with powerful 60W amplification and seamless multiroom sync, all in one elegant system." />
 
-  <!-- Section split normale -->
+  <SectionVideo desktop-video-src="/src/assets/videos/demo-desktop.mp4"
+    mobile-video-src="/src/assets/videos/demo-mobile.mp4" :autoplay="false" />
+
   <SectionSplit variant="default">
     <template #content>
-      <SectionTitle 
-        tag="Features" 
-        title="Streaming multiplateforme" 
+      <SectionTitle tag="Features" title="Streaming multiplateforme"
         paragraph="Compatible avec Spotify Connect, AirPlay et Bluetooth. Contrôlez votre musique depuis n'importe quelle source." />
     </template>
     <template #illustration>
@@ -20,12 +17,9 @@
     </template>
   </SectionSplit>
 
-  <!-- Section split inversée avec fond contrast -->
   <SectionSplit variant="contrast" :reversed="true">
     <template #content>
-      <SectionTitle 
-        tag="Hardware" 
-        title="Amplification 60W" 
+      <SectionTitle tag="Hardware" title="Amplification 60W"
         paragraph="Puce audio haute qualité avec amplification intégrée pour alimenter vos enceintes préférées." />
     </template>
     <template #illustration>
@@ -40,6 +34,8 @@ import GridToggle from './components/GridToggle.vue'
 import SectionTitle from './components/SectionTitle.vue'
 import SectionSplit from './components/SectionSplit.vue'
 import SectionCover from './components/SectionCover.vue'
+import SectionVideo from './components/SectionVideo.vue'
+
 
 export default {
   name: 'App',
@@ -47,7 +43,8 @@ export default {
     GridToggle,
     SectionTitle,
     SectionSplit,
-    SectionCover
+    SectionCover,
+    SectionVideo
   },
   methods: {
     onGridToggle(isVisible) {
