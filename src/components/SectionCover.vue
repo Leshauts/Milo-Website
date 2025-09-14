@@ -1,5 +1,15 @@
 <template>
     <section class="section-cover">
+        <!-- Logo -->
+        <div class="section-cover__logo">
+            <img :src="miloLogo" alt="Milo Logo" class="logo-image" />
+        </div>
+
+        <!-- Image cover -->
+        <div class="section-cover__image">
+            <img :src="coverImage" alt="Cover" class="cover-image" />
+        </div>
+
         <!-- SectionTitle main intégré -->
         <div class="section-title-main">
             <div class="section-title-main__tag body-large">
@@ -37,6 +47,8 @@ import multiroomIcon from '../assets/icons/multiroom.svg'
 import equalizerIcon from '../assets/icons/equalizer.svg'
 import touchIcon from '../assets/icons/touch.svg'
 import phoneIcon from '../assets/icons/phone.svg'
+import miloLogo from '../assets/images/milo.svg'
+import coverImage from '../assets/images/cover.png'
 
 export default {
     name: 'SectionCover',
@@ -66,7 +78,9 @@ export default {
             multiroomIcon,
             equalizerIcon,
             touchIcon,
-            phoneIcon
+            phoneIcon,
+            miloLogo,
+            coverImage
         }
     }
 }
@@ -78,8 +92,35 @@ export default {
     grid-template-columns: subgrid;
     grid-column: 1 / -1;
     border-radius: var(--border-radius-large);
-    padding: var(--space-09) var(--space-06);
+    padding: var(--space-05) var(--space-06) var(--space-09) var(--space-06);
     background: linear-gradient(to bottom, #F1F1F1, #DADED9);
+}
+
+/* Logo */
+.section-cover__logo {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--space-05);
+}
+
+.logo-image {
+    height: 40px;
+    width: auto;
+}
+
+/* Image cover */
+.section-cover__image {
+    grid-column: 2 / -2;
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--space-06);
+}
+
+.cover-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--border-radius-medium);
 }
 
 /* SectionTitle main intégré */
@@ -121,6 +162,10 @@ export default {
     .features-grid {
         grid-column: 1 / -1;
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .logo-image {
+        height: 32px;
     }
 }
 </style>

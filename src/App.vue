@@ -7,12 +7,6 @@
     title="The all-in-one streaming&nbsp;amplifier"
     paragraph="One touch. Any source. Every room. Milō brings together Spotify, Bluetooth, and macOS streaming with powerful 60W amplification and seamless multiroom sync, all in one elegant system." />
 
-  <!-- SectionTitle classique simplifié -->
-  <SectionTitle 
-    tag="Fonctionnalités" 
-    title="Architecture modulaire pour Raspberry Pi"
-    paragraph="Un système pensé pour la flexibilité et la performance, avec une interface utilisateur moderne et responsive." />
-
   <!-- Section split normale -->
   <SectionSplit variant="default">
     <template #content>
