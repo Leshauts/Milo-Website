@@ -8,32 +8,36 @@
   </Section>
 
   <!-- Section fonctionnalités -->
-  <Section variant="strong">
+  <Section variant="default">
     <SectionTitle tag="Fonctionnalités" title="Architecture modulaire pour Raspberry Pi"
       paragraph="Un système pensé pour la flexibilité et la performance, avec une interface utilisateur moderne et responsive." />
   </Section>
 
   <!-- Section split normale -->
-  <SectionSplit variant="default">
-    <template #content>
-      <SectionTitle tag="Features" title="Streaming multiplateforme" 
-        paragraph="Compatible avec Spotify Connect, AirPlay et Bluetooth. Contrôlez votre musique depuis n'importe quelle source." />
-    </template>
-    <template #illustration>
-      <!-- Animation future ici -->
-    </template>
-  </SectionSplit>
+  <Section variant="default">
+    <SectionSplit>
+      <template #content>
+        <SectionTitle tag="Features" title="Streaming multiplateforme" 
+          paragraph="Compatible avec Spotify Connect, AirPlay et Bluetooth. Contrôlez votre musique depuis n'importe quelle source." />
+      </template>
+      <template #illustration>
+        <!-- Animation future ici -->
+      </template>
+    </SectionSplit>
+  </Section>
 
   <!-- Section split inversée avec fond contrast -->
-  <SectionSplit variant="contrast" :reversed="true">
-    <template #content>
-      <SectionTitle tag="Hardware" title="Amplification 60W" 
-        paragraph="Puce audio haute qualité avec amplification intégrée pour alimenter vos enceintes préférées." />
-    </template>
-    <template #illustration>
-      <!-- Animation future ici -->
-    </template>
-  </SectionSplit>
+  <Section variant="contrast">
+    <SectionSplit :reversed="true">
+      <template #content>
+        <SectionTitle tag="Hardware" title="Amplification 60W" 
+          paragraph="Puce audio haute qualité avec amplification intégrée pour alimenter vos enceintes préférées." />
+      </template>
+      <template #illustration>
+        <!-- Animation future ici -->
+      </template>
+    </SectionSplit>
+  </Section>
 
 </template>
 

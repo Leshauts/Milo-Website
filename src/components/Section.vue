@@ -1,8 +1,6 @@
 <template>
   <section class="section" :class="sectionClass">
-    <div class="section-content">
-      <slot />
-    </div>
+    <slot />
   </section>
 </template>
 
@@ -26,25 +24,19 @@ export default {
 
 <style scoped>
 .section {
+  display: grid;
+  grid-template-columns: subgrid;
   grid-column: 1 / -1;
-  border-radius: 24px;
-  padding: var(--space-08) var(--space-06);
-  margin-bottom: var(--space-06);
-  display: contents;
+  border-radius: var(--border-radius-large);
+  /* padding: var(--space-08) var(--space-06); */
 }
 
 .section--default {
   background-color: var(--color-background-neutral);
 }
 
-
 .section--contrast {
   background-color: var(--color-background-contrast);
   color: var(--color-text-contrast);
 }
-
-.section-content {
-  display: contents;
-}
-
 </style>

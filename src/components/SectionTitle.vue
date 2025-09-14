@@ -52,16 +52,12 @@ export default {
 </script>
 
 <style scoped>
-
-
 .section-title {
-  grid-column: 2 / -2;
+  grid-column: 3 / -3;
   margin-bottom: var(--space-07);
   text-align: center;
 }
-.section-title--main {
-  grid-column: 3 / -3;
-}
+
 
 .section-title__tag {
   color: var(--color-brand);
@@ -78,5 +74,11 @@ export default {
   color: var(--color-text-secondary);
 }
 
-
+/* === RESPONSIVE MOBILE === */
+@media (max-width: 768px) {
+  .section-title,
+  .section-title--main {
+    grid-column: 1 / -1;
+  }
+}
 </style>
