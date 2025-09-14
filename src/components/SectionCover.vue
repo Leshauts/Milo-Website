@@ -18,7 +18,7 @@ export default {
   border-radius: var(--border-radius-large);
   padding: var(--space-08) var(--space-06);
   margin-bottom: var(--space-06);
-  background-color: var(--color-background-neutral);
+  background: linear-gradient(to bottom, #F1F1F1, #D1DED9);
 }
 
 /* Positionnement des SectionTitle enfants */
