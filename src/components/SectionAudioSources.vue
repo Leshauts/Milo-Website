@@ -164,7 +164,7 @@ export default {
     grid-template-rows: auto 1fr;
     background-color: var(--color-background-neutral);
     border-radius: var(--border-radius-large);
-    padding: var(--space-08) var(--space-06);
+    padding: var(--space-09);
     height: 100vh;
     min-height: 600px;
     z-index: 10;
@@ -216,6 +216,7 @@ export default {
     border-radius: var(--border-radius-xlarge);
     overflow: hidden;
     max-height: 100%;
+    max-width: 1024px;
     aspect-ratio: 7 / 4;
 }
 
@@ -248,7 +249,7 @@ export default {
     gap: var(--space-04);
     align-items: flex-start;
     flex-shrink: 0;
-    min-width: 280px;
+    min-width: 16%;
 }
 
 .audio-button {
