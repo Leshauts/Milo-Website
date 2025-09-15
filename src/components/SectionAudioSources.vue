@@ -297,7 +297,7 @@ export default {
     object-fit: cover;
     display: block;
     opacity: 0;
-    transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.8s ease-in-out;
 }
 
 .video-element:first-child {

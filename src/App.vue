@@ -4,10 +4,12 @@
   <SectionCover tag="Meet Milō" title="The all-in-one streaming&nbsp;amplifier"
     paragraph="One touch. Any source. Every room. Milō brings together Spotify, Bluetooth, and macOS streaming with powerful 60W amplification and seamless multiroom sync, all in one elegant system." />
 
+
   <SectionVideo desktop-video-src="/src/assets/videos/demo-desktop.mp4"
     mobile-video-src="/src/assets/videos/demo-mobile.mp4" :autoplay="false" />
-
+    
   <SectionAudioSources />
+
 
   <SectionSplit variant="default">
     <template #content>
