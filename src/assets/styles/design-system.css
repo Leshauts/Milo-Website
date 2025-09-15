@@ -29,6 +29,8 @@
     --space-07: 48px;
     --space-08: 64px;
     --space-09: 96px;
+    --space-10: 128px;
+
 
     /* === COULEURS PRINCIPALES === */
     --color-brand: #EF642E;
@@ -58,6 +60,7 @@
     --border-radius-medium: 16px;
     --border-radius-large: 24px;
     --border-radius-xlarge: 32px;
+    --border-radius-xxlarge: 48px;
 
 }
 
@@ -90,11 +93,20 @@
         --space-07: 32px;
         --space-08: 48px;
         --space-09: 64px;
+        --space-10: 96px;
+
 
         /* Variables de grille mobile */
         --grid-columns: 4;
         --grid-margin: 8px;
         --grid-gutter: 16px;
+
+        /* === BORDER RADIUS === */
+        --border-radius-small: 8px;
+        --border-radius-medium: 12px;
+        --border-radius-large: 16px;
+        --border-radius-xlarge: 24px;
+        --border-radius-xxlarge: 32px;
     }
 }
 
