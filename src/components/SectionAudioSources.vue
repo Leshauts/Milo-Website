@@ -9,15 +9,17 @@
                 <h2 class="section-title__title h2">
                     Play audio from <span class="no-wrap"><img :src="spotifyIcon" alt="Spotify"
                             class="inline-icon" />Spotify</span>, <span class="no-wrap"><img :src="bluetoothIcon"
-                            alt="Bluetooth" class="inline-icon" />Bluetooth</span> or&nbsp;your<span
+                            alt="Bluetooth" class="inline-icon" />Bluetooth</span> or&nbsp;your <span
                         class="no-wrap"><img :src="macosIcon" alt="Mac" class="inline-icon" />Mac</span>.
                 </h2>
             </div>
 
             <div class="audio-sources-display">
                 <div class="video-container">
-                    <video ref="mainVideo" :src="currentVideoSrc" class="video-element" autoplay loop muted playsinline
-                        @loadstart="onVideoChange"></video>
+                    <video v-for="(video, index) in videos" :key="index" :ref="el => videoRefs[index] = el" :src="video"
+                        class="video-element" :class="{ 'video-active': index === activeButtonIndex }" autoplay loop
+                        muted playsinline @loadstart="onVideoLoadStart(index)" @canplay="onVideoCanPlay(index)">
+                    </video>
                 </div>
 
                 <div class="buttons-container">
@@ -44,6 +46,8 @@ export default {
             bluetoothIcon,
             macosIcon,
             activeButtonIndex: 0,
+            isTransitioning: false,
+            videoRefs: [],
             videos: [
                 '/src/assets/videos/spotify-demo.mp4',
                 '/src/assets/videos/bluetooth-demo.mp4',
@@ -56,19 +60,32 @@ export default {
             ]
         }
     },
-    computed: {
-        currentVideoSrc() {
-            return this.videos[this.activeButtonIndex]
-        }
-    },
     mounted() {
         window.addEventListener('scroll', this.handleScroll)
+        this.initializeVideos()
     },
     beforeUnmount() {
         window.removeEventListener('scroll', this.handleScroll)
     },
     methods: {
+        initializeVideos() {
+            // S'assurer que seule la première vidéo est visible au démarrage
+            this.$nextTick(() => {
+                this.videoRefs.forEach((video, index) => {
+                    if (video) {
+                        if (index === 0) {
+                            video.play().catch(() => { })
+                        } else {
+                            video.pause()
+                        }
+                    }
+                })
+            })
+        },
+
         handleScroll() {
+            if (this.isTransitioning) return
+
             const container = this.$refs.stickyContainer
             if (!container) return
 
@@ -83,55 +100,47 @@ export default {
                 const newButtonIndex = Math.min(2, Math.floor(progress * 3))
 
                 if (newButtonIndex !== this.activeButtonIndex) {
-                    this.setActiveButton(newButtonIndex, false)
+                    this.setActiveButton(newButtonIndex)
                 }
             }
         },
 
-        setActiveButton(index, shouldScroll = true) {
-            this.activeButtonIndex = index
-            
-            // Ne faire le scroll que si explicitement demandé (clic utilisateur)
-            if (!shouldScroll) return
-            
-            // Activer le flag pour désactiver handleScroll
-            this.isScrolling = true
-            
-            // Calculer la position de scroll correspondante
-            const container = this.$refs.stickyContainer
-            if (!container) return
-            
-            const containerRect = container.getBoundingClientRect()
-            const containerHeight = container.offsetHeight
-            const sectionHeight = window.innerHeight
-            const scrollableHeight = containerHeight - sectionHeight
-            
+        setActiveButton(index) {
+            if (index === this.activeButtonIndex || this.isTransitioning) return
 
-            const targetProgress = (index / 3) + 0.01
-            const targetScroll = targetProgress * scrollableHeight
-            
-            // Position absolue de scroll = position actuelle du container + scroll relatif
-            const containerTop = container.offsetTop
-            const targetScrollPosition = containerTop + targetScroll
-            
-            // Scroll instantané vers la position calculée
-            window.scrollTo({
-                top: targetScrollPosition,
-                behavior: 'instant'
-            })
-            
-            // Réactiver handleScroll après un court délai
+            this.isTransitioning = true
+            const previousIndex = this.activeButtonIndex
+            this.activeButtonIndex = index
+
+            // Préparer la nouvelle vidéo
+            const newVideo = this.videoRefs[index]
+            const oldVideo = this.videoRefs[previousIndex]
+
+            if (newVideo) {
+                newVideo.currentTime = 0
+                newVideo.play().catch(() => { })
+            }
+
+            // Attendre la fin de la transition CSS avant de nettoyer
             setTimeout(() => {
-                this.isScrolling = false
-            }, 100)
+                if (oldVideo) {
+                    oldVideo.pause()
+                }
+                this.isTransitioning = false
+            }, 400) // Doit correspondre à la durée de transition CSS
         },
 
-        onVideoChange() {
-            // S'assurer que la vidéo joue quand elle change
-            if (this.$refs.mainVideo) {
-                this.$refs.mainVideo.play().catch(() => {
-                    // Ignorer les erreurs de lecture automatique
-                })
+        onVideoLoadStart(index) {
+            // Optionnel: gérer le loading
+        },
+
+        onVideoCanPlay(index) {
+            // S'assurer que la vidéo active joue
+            if (index === this.activeButtonIndex) {
+                const video = this.videoRefs[index]
+                if (video) {
+                    video.play().catch(() => { })
+                }
             }
         }
     }
@@ -197,7 +206,7 @@ export default {
     grid-column: inherit;
     align-items: center;
     justify-content: center;
-    gap: var(--space-09);
+    gap: var(--space-07);
     max-height: 100%;
     overflow: hidden;
 }
@@ -215,17 +224,31 @@ export default {
     height: 100%;
     object-fit: cover;
     display: block;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.video-element:first-child {
+    position: relative;
+}
+
+.video-element:not(:first-child) {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.video-element.video-active {
+    opacity: 1;
 }
 
 .buttons-container {
-
     display: flex;
     flex-direction: column;
     gap: var(--space-04);
     align-items: flex-start;
-    /* Largeur fixe pour les boutons */
     flex-shrink: 0;
-    min-width: 250px;
+    min-width: 280px;
 }
 
 .audio-button {
@@ -258,7 +281,6 @@ export default {
 /* === RESPONSIVE MOBILE === */
 @media (max-width: 600px) {
     .section-title {
-
         grid-column: 1 / -1;
     }
 
@@ -267,10 +289,13 @@ export default {
     }
 
     .audio-sources-display {
-        flex-direction: column;
+        flex-direction: column-reverse;
         gap: var(--space-05);
     }
 
+    .video-container {
+        /* aspect-ratio: 4 / 3; */
+    }
 
     .buttons-container {
         flex-direction: row;

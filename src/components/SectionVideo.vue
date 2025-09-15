@@ -133,7 +133,6 @@ export default {
     display: grid;
     grid-template-columns: subgrid;
     grid-column: 1 / -1;
-    margin-bottom: var(--space-08);
 }
 
 .section-video__container {
