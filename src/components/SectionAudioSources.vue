@@ -46,8 +46,8 @@ export default {
             bluetoothIcon,
             macosIcon,
             activeButtonIndex: 0,
-            isTransitioning: false,
-            videoRefs: [],
+            isScrolling: false, // Flag pour désactiver handleScroll pendant scroll automatique
+            videoRefs: [], // Array pour stocker les références des vidéos
             videos: [
                 '/src/assets/videos/spotify-demo.mp4',
                 '/src/assets/videos/bluetooth-demo.mp4',
@@ -60,32 +60,22 @@ export default {
             ]
         }
     },
+    computed: {
+        currentVideoSrc() {
+            return this.videos[this.activeButtonIndex]
+        }
+    },
     mounted() {
         window.addEventListener('scroll', this.handleScroll)
-        this.initializeVideos()
     },
     beforeUnmount() {
         window.removeEventListener('scroll', this.handleScroll)
     },
     methods: {
-        initializeVideos() {
-            // S'assurer que seule la première vidéo est visible au démarrage
-            this.$nextTick(() => {
-                this.videoRefs.forEach((video, index) => {
-                    if (video) {
-                        if (index === 0) {
-                            video.play().catch(() => { })
-                        } else {
-                            video.pause()
-                        }
-                    }
-                })
-            })
-        },
-
         handleScroll() {
-            if (this.isTransitioning) return
-
+            // Ne pas détecter le scroll si on est en train de scroller automatiquement
+            if (this.isScrolling) return
+            
             const container = this.$refs.stickyContainer
             if (!container) return
 
@@ -100,47 +90,62 @@ export default {
                 const newButtonIndex = Math.min(2, Math.floor(progress * 3))
 
                 if (newButtonIndex !== this.activeButtonIndex) {
-                    this.setActiveButton(newButtonIndex)
+                    this.setActiveButton(newButtonIndex, false)
                 }
             }
         },
 
-        setActiveButton(index) {
-            if (index === this.activeButtonIndex || this.isTransitioning) return
-
-            this.isTransitioning = true
-            const previousIndex = this.activeButtonIndex
+        setActiveButton(index, shouldScroll = true) {
             this.activeButtonIndex = index
-
-            // Préparer la nouvelle vidéo
-            const newVideo = this.videoRefs[index]
-            const oldVideo = this.videoRefs[previousIndex]
-
-            if (newVideo) {
-                newVideo.currentTime = 0
-                newVideo.play().catch(() => { })
-            }
-
-            // Attendre la fin de la transition CSS avant de nettoyer
+            
+            // Ne faire le scroll que si explicitement demandé (clic utilisateur)
+            if (!shouldScroll) return
+            
+            // Activer le flag pour désactiver handleScroll
+            this.isScrolling = true
+            
+            // Calculer la position de scroll correspondante
+            const container = this.$refs.stickyContainer
+            if (!container) return
+            
+            const containerRect = container.getBoundingClientRect()
+            const containerHeight = container.offsetHeight
+            const sectionHeight = window.innerHeight
+            const scrollableHeight = containerHeight - sectionHeight
+            
+            // Calculer la progression correspondant à l'index du bouton
+            // Commencer à +1% du début de chaque zone
+            // Zone 0: 1%, Zone 1: 34%, Zone 2: 67%
+            const targetProgress = (index / 3) + 0.01
+            const targetScroll = targetProgress * scrollableHeight
+            
+            // Position absolue de scroll = position actuelle du container + scroll relatif
+            const containerTop = container.offsetTop
+            const targetScrollPosition = containerTop + targetScroll
+            
+            // Scroll instantané vers la position calculée
+            window.scrollTo({
+                top: targetScrollPosition,
+                behavior: 'instant'
+            })
+            
+            // Réactiver handleScroll après un court délai
             setTimeout(() => {
-                if (oldVideo) {
-                    oldVideo.pause()
-                }
-                this.isTransitioning = false
-            }, 400) // Doit correspondre à la durée de transition CSS
+                this.isScrolling = false
+            }, 100)
         },
 
         onVideoLoadStart(index) {
-            // Optionnel: gérer le loading
+            // Gérer le démarrage du chargement vidéo
+            console.log(`Video ${index} started loading`)
         },
 
         onVideoCanPlay(index) {
-            // S'assurer que la vidéo active joue
-            if (index === this.activeButtonIndex) {
-                const video = this.videoRefs[index]
-                if (video) {
-                    video.play().catch(() => { })
-                }
+            // S'assurer que la vidéo active joue quand elle est prête
+            if (index === this.activeButtonIndex && this.videoRefs[index]) {
+                this.videoRefs[index].play().catch(() => {
+                    // Ignorer les erreurs de lecture automatique
+                })
             }
         }
     }
