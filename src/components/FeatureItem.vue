@@ -1,3 +1,4 @@
+<!-- src / components / FeatureItem.vue -->
 <template>
     <div class="feature-item">
         <!-- Ligne : icon + name -->

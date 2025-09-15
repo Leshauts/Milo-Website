@@ -25,7 +25,14 @@
 
                 <div class="buttons-container">
                     <button v-for="(button, index) in buttons" :key="index" class="audio-button"
-                        :style="{ opacity: activeButtonIndex === index ? 1 : 0.3 }" @click="setActiveButton(index)">
+                        :class="{ 'audio-button--active': activeButtonIndex === index }"
+                        @click="setActiveButton(index)">
+                        <div class="button-icon-container">
+                            <img :src="button.iconMono" :alt="button.name + ' mono icon'"
+                                class="button-icon button-icon--mono" />
+                            <img :src="button.iconColor" :alt="button.name + ' color icon'"
+                                class="button-icon button-icon--color" />
+                        </div>
                         {{ button.name }}
                     </button>
                 </div>
@@ -44,6 +51,9 @@
 import spotifyIcon from '../assets/icons/spotify-mono.svg'
 import bluetoothIcon from '../assets/icons/bluetooth-mono.svg'
 import macosIcon from '../assets/icons/macos-mono.svg'
+import spotifyColor from '../assets/icons/spotify-color.svg'
+import bluetoothColor from '../assets/icons/bluetooth-color.svg'
+import macosColor from '../assets/icons/macos-color.svg'
 
 export default {
     name: 'SectionAudioSources',
@@ -62,9 +72,9 @@ export default {
                 '/src/assets/videos/mac-audio-demo.mp4'
             ],
             buttons: [
-                { name: 'Spotify' },
-                { name: 'Bluetooth' },
-                { name: 'Mac Audio' }
+                { name: 'Spotify', iconColor: spotifyColor, iconMono: spotifyIcon },
+                { name: 'Bluetooth', iconColor: bluetoothColor, iconMono: bluetoothIcon },
+                { name: 'Mac Audio', iconColor: macosColor, iconMono: macosIcon }
             ],
             scrollBreakpoints: [0.28, 0.72, 1.0]
         }
@@ -275,7 +285,7 @@ export default {
     grid-column: inherit;
     align-items: center;
     justify-content: center;
-    gap: var(--space-09);
+    gap: var(--space-08);
     max-height: 100%;
     overflow: hidden;
     padding: var(--space-08) var(--space-10) var(--space-10) var(--space-10);
@@ -320,20 +330,63 @@ export default {
     gap: var(--space-04);
     align-items: flex-start;
     flex-shrink: 0;
-    min-width: 20%;
+    min-width: 24%;
 }
 
 .audio-button {
-    background: none;
+    background: var(--color-background-neutral-32);
     width: 100%;
-    border: 1px solid var(--color-text);
-    color: var(--color-text);
-    padding: var(--space-03) var(--space-04);
-    border-radius: var(--border-radius-small);
+    border: none;
+    box-shadow: 0px 2px 32px rgba(0, 0, 0, 0.08);
+    color: var(--color-text-secondary);
+    padding: var(--space-03);
+    border-radius: var(--border-radius-medium);
     cursor: pointer;
-    transition: opacity 0.3s ease;
-    font-family: 'Neue Montreal', sans-serif;
-    font-size: var(--font-size-body-medium);
+    transition: color 0.3s ease;
+    font-family: 'Perfectly Nineties', serif;
+    font-size: var(--font-size-h5);
+    line-height: var(--line-height-h5);
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: var(--space-03);
+}
+
+.audio-button--active {
+    color: var(--color-text);
+    background: var(--color-background-neutral);
+}
+
+.button-icon-container {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+}
+
+.button-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.4s ease;
+}
+
+.button-icon--mono {
+    opacity: 0.3;
+}
+
+.button-icon--color {
+    opacity: 0;
+}
+
+.audio-button--active .button-icon--mono {
+    opacity: 0;
+}
+
+.audio-button--active .button-icon--color {
+    opacity: 1;
 }
 
 .animated-gradients {
@@ -417,6 +470,11 @@ export default {
         width: 100%;
     }
 
+    .button-icon-container {
+        width: 32px;
+        height: 32px;
+    }
+
     .inline-icon {
         width: 24px;
         height: 24px;
@@ -441,6 +499,11 @@ export default {
         flex-direction: row;
         justify-content: center;
         width: 100%;
+    }
+
+    .button-icon-container {
+        width: 24px;
+        height: 24px;
     }
 
     .inline-icon {

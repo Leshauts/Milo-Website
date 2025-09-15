@@ -1,3 +1,4 @@
+<!-- src / components / ButtonIcon.vue -->
 <template>
     <button class="button-icon" @click="$emit('click')">
         <img :src="iconSrc" :alt="iconAlt" class="button-icon__image" />
