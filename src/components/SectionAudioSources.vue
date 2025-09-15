@@ -179,7 +179,7 @@ export default {
 .video-element {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
     display: block;
 }
 
@@ -206,6 +206,7 @@ export default {
 
 /* === RESPONSIVE TABLET === */
 @media (max-width: 1024px) {
+
     .section-title__tag,
     .section-title__title {
         grid-column: 1 / -1;
@@ -219,6 +220,11 @@ export default {
 
 /* === RESPONSIVE MOBILE === */
 @media (max-width: 600px) {
+    .section-title {
+
+        grid-column: 1 / -1;
+    }
+
     .section-audio-sources {
         min-height: 500px;
     }
@@ -228,9 +234,6 @@ export default {
         gap: var(--space-05);
     }
 
-    .video-container {
-        aspect-ratio: 4 / 3;
-    }
 
     .buttons-container {
         flex-direction: row;
