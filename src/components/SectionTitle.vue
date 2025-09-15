@@ -1,3 +1,4 @@
+<!-- src / components / SectionTitle.vue -->
 <template>
   <div class="section-title">
     <div class="section-title__tag body-small">
