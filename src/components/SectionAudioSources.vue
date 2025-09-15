@@ -83,13 +83,47 @@ export default {
                 const newButtonIndex = Math.min(2, Math.floor(progress * 3))
 
                 if (newButtonIndex !== this.activeButtonIndex) {
-                    this.setActiveButton(newButtonIndex)
+                    this.setActiveButton(newButtonIndex, false)
                 }
             }
         },
 
-        setActiveButton(index) {
+        setActiveButton(index, shouldScroll = true) {
             this.activeButtonIndex = index
+            
+            // Ne faire le scroll que si explicitement demandé (clic utilisateur)
+            if (!shouldScroll) return
+            
+            // Activer le flag pour désactiver handleScroll
+            this.isScrolling = true
+            
+            // Calculer la position de scroll correspondante
+            const container = this.$refs.stickyContainer
+            if (!container) return
+            
+            const containerRect = container.getBoundingClientRect()
+            const containerHeight = container.offsetHeight
+            const sectionHeight = window.innerHeight
+            const scrollableHeight = containerHeight - sectionHeight
+            
+
+            const targetProgress = (index / 3) + 0.01
+            const targetScroll = targetProgress * scrollableHeight
+            
+            // Position absolue de scroll = position actuelle du container + scroll relatif
+            const containerTop = container.offsetTop
+            const targetScrollPosition = containerTop + targetScroll
+            
+            // Scroll instantané vers la position calculée
+            window.scrollTo({
+                top: targetScrollPosition,
+                behavior: 'instant'
+            })
+            
+            // Réactiver handleScroll après un court délai
+            setTimeout(() => {
+                this.isScrolling = false
+            }, 100)
         },
 
         onVideoChange() {
@@ -163,7 +197,7 @@ export default {
     grid-column: inherit;
     align-items: center;
     justify-content: center;
-    gap: var(--space-07);
+    gap: var(--space-09);
     max-height: 100%;
     overflow: hidden;
 }
@@ -184,16 +218,19 @@ export default {
 }
 
 .buttons-container {
+
     display: flex;
     flex-direction: column;
     gap: var(--space-04);
     align-items: flex-start;
     /* Largeur fixe pour les boutons */
     flex-shrink: 0;
+    min-width: 250px;
 }
 
 .audio-button {
     background: none;
+    width: 100%;
     border: 1px solid var(--color-text);
     color: var(--color-text);
     padding: var(--space-03) var(--space-04);
