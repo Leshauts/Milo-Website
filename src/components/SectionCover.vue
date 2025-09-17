@@ -150,7 +150,7 @@ export default {
     grid-column: 2 / 8;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: var(--space-03);
+    gap: var(--space-02);
 }
 
 /* === RESPONSIVE MOBILE === */

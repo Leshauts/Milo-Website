@@ -1,50 +1,48 @@
 <!-- src / components / SectionAudioSources.vue -->
 <template>
-    <div class="sticky-container" ref="stickyContainer">
-        <section class="section-audio-sources" ref="stickySection">
-            <div class="section-title">
-                <div class="section-title__tag body-small">
-                    Audio Sources
-                </div>
-                <h2 class="section-title__title h2">
-                    Play audio from <span class="no-wrap"><img :src="spotifyIcon" alt="Spotify"
-                            class="inline-icon" />Spotify</span>, <span class="no-wrap"><img :src="bluetoothIcon"
-                            alt="Bluetooth" class="inline-icon" />Bluetooth</span> or&nbsp;your <span
-                        class="no-wrap"><img :src="macosIcon" alt="Mac" class="inline-icon" />Mac</span>.
-                </h2>
+    <section class="section-audio-sources">
+        <div class="section-title">
+            <div class="section-title__tag body-small">
+                Audio Sources
+            </div>
+            <h2 class="section-title__title h2">
+                Play audio from <span class="no-wrap"><img :src="spotifyIcon" alt="Spotify"
+                        class="inline-icon" />Spotify</span>, <span class="no-wrap"><img :src="bluetoothIcon"
+                        alt="Bluetooth" class="inline-icon" />Bluetooth</span> or&nbsp;your <span
+                    class="no-wrap"><img :src="macosIcon" alt="Mac" class="inline-icon" />Mac</span>.
+            </h2>
+        </div>
+
+        <div class="audio-sources-display">
+            <div class="video-container">
+                <video v-for="(video, index) in videos" :key="index" :ref="el => setVideoRef(el, index)"
+                    :src="video" class="video-element" :class="{ 'video-active': index === activeButtonIndex }"
+                    :autoplay="index === 0" loop muted playsinline @loadeddata="onVideoLoaded(index)"
+                    @canplay="onVideoCanPlay(index)">
+                </video>
             </div>
 
-            <div class="audio-sources-display">
-                <div class="video-container">
-                    <video v-for="(video, index) in videos" :key="index" :ref="el => setVideoRef(el, index)"
-                        :src="video" class="video-element" :class="{ 'video-active': index === activeButtonIndex }"
-                        :autoplay="index === 0" loop muted playsinline @loadeddata="onVideoLoaded(index)"
-                        @canplay="onVideoCanPlay(index)">
-                    </video>
-                </div>
-
-                <div class="buttons-container">
-                    <button v-for="(button, index) in buttons" :key="index" class="audio-button"
-                        :class="{ 'audio-button--active': activeButtonIndex === index }"
-                        @click="setActiveButton(index)">
-                        <div class="button-icon-container">
-                            <img :src="button.iconMono" :alt="button.name + ' mono icon'"
-                                class="button-icon button-icon--mono" />
-                            <img :src="button.iconColor" :alt="button.name + ' color icon'"
-                                class="button-icon button-icon--color" />
-                        </div>
-                        {{ button.name }}
-                    </button>
-                </div>
+            <div class="buttons-container">
+                <button v-for="(button, index) in buttons" :key="index" class="audio-button"
+                    :class="{ 'audio-button--active': activeButtonIndex === index }"
+                    @click="setActiveButton(index)">
+                    <div class="button-icon-container">
+                        <img :src="button.iconMono" :alt="button.name + ' mono icon'"
+                            class="button-icon button-icon--mono" />
+                        <img :src="button.iconColor" :alt="button.name + ' color icon'"
+                            class="button-icon button-icon--color" />
+                    </div>
+                    {{ button.name }}
+                </button>
             </div>
+        </div>
 
-            <div class="animated-gradients">
-                <div class="gradient gradient-0" :class="{ 'gradient-active': activeButtonIndex === 0 }"></div>
-                <div class="gradient gradient-1" :class="{ 'gradient-active': activeButtonIndex === 1 }"></div>
-                <div class="gradient gradient-2" :class="{ 'gradient-active': activeButtonIndex === 2 }"></div>
-            </div>
-        </section>
-    </div>
+        <div class="animated-gradients">
+            <div class="gradient gradient-0" :class="{ 'gradient-active': activeButtonIndex === 0 }"></div>
+            <div class="gradient gradient-1" :class="{ 'gradient-active': activeButtonIndex === 1 }"></div>
+            <div class="gradient gradient-2" :class="{ 'gradient-active': activeButtonIndex === 2 }"></div>
+        </div>
+    </section>
 </template>
 
 <script>
@@ -63,7 +61,6 @@ export default {
             bluetoothIcon,
             macosIcon,
             activeButtonIndex: 0,
-            isScrolling: false,
             videoRefs: {},
             videosLoaded: {},
             videos: [
@@ -75,20 +72,8 @@ export default {
                 { name: 'Spotify', iconColor: spotifyColor, iconMono: spotifyIcon },
                 { name: 'Bluetooth', iconColor: bluetoothColor, iconMono: bluetoothIcon },
                 { name: 'Mac Audio', iconColor: macosColor, iconMono: macosIcon }
-            ],
-            scrollBreakpoints: [0.28, 0.72, 1.0]
+            ]
         }
-    },
-    computed: {
-        currentVideoSrc() {
-            return this.videos[this.activeButtonIndex]
-        }
-    },
-    mounted() {
-        window.addEventListener('scroll', this.handleScroll)
-    },
-    beforeUnmount() {
-        window.removeEventListener('scroll', this.handleScroll)
     },
     watch: {
         activeButtonIndex(newIndex, oldIndex) {
@@ -96,72 +81,8 @@ export default {
         }
     },
     methods: {
-        handleScroll() {
-            if (this.isScrolling) return
-
-            const container = this.$refs.stickyContainer
-            if (!container) return
-
-            const containerRect = container.getBoundingClientRect()
-            const containerHeight = container.offsetHeight
-            const sectionHeight = window.innerHeight
-            const scrollableHeight = containerHeight - sectionHeight
-
-            if (containerRect.top <= 0 && containerRect.bottom > sectionHeight) {
-                const scrolled = Math.abs(containerRect.top)
-                const progress = Math.min(scrolled / scrollableHeight, 1)
-
-                let newButtonIndex = 0
-                if (progress >= this.scrollBreakpoints[1]) {
-                    newButtonIndex = 2
-                } else if (progress >= this.scrollBreakpoints[0]) {
-                    newButtonIndex = 1
-                } else {
-                    newButtonIndex = 0
-                }
-
-                if (newButtonIndex !== this.activeButtonIndex) {
-                    this.setActiveButton(newButtonIndex, false)
-                }
-            }
-        },
-
-        setActiveButton(index, shouldScroll = true) {
+        setActiveButton(index) {
             this.activeButtonIndex = index
-
-            if (!shouldScroll) return
-
-            this.isScrolling = true
-
-            const container = this.$refs.stickyContainer
-            if (!container) return
-
-            const containerRect = container.getBoundingClientRect()
-            const containerHeight = container.offsetHeight
-            const sectionHeight = window.innerHeight
-            const scrollableHeight = containerHeight - sectionHeight
-
-            let targetProgress
-            if (index === 0) {
-                targetProgress = 0.01
-            } else if (index === 1) {
-                targetProgress = this.scrollBreakpoints[0] + 0.01
-            } else {
-                targetProgress = this.scrollBreakpoints[1] + 0.01
-            }
-
-            const targetScroll = targetProgress * scrollableHeight
-            const containerTop = container.offsetTop
-            const targetScrollPosition = containerTop + targetScroll
-
-            window.scrollTo({
-                top: targetScrollPosition,
-                behavior: 'instant'
-            })
-
-            setTimeout(() => {
-                this.isScrolling = false
-            }, 100)
         },
 
         setVideoRef(el, index) {
@@ -227,25 +148,15 @@ export default {
 </script>
 
 <style scoped>
-.sticky-container {
-    display: grid;
-    grid-template-columns: subgrid;
-    grid-column: 1 / -1;
-    height: calc(100vh + 1400px);
-}
-
 .section-audio-sources {
-    position: sticky;
-    top: 0;
+    position: relative;
     display: grid;
     grid-template-columns: subgrid;
     grid-column: 1 / -1;
     grid-template-rows: auto 1fr;
     background-color: var(--color-background-neutral);
     border-radius: var(--border-radius-large);
-    height: 100vh;
     min-height: 600px;
-    z-index: 10;
     overflow: hidden;
 }
 
@@ -255,6 +166,7 @@ export default {
     grid-column: 2 / -2;
     margin-top: var(--space-09);
     text-align: center;
+    z-index: 2;;
 }
 
 .section-title__tag {
@@ -287,6 +199,7 @@ export default {
     justify-content: center;
     gap: var(--space-08);
     max-height: 100%;
+    z-index: 2;
     overflow: hidden;
     padding: var(--space-08) var(--space-10) var(--space-10) var(--space-10);
 }
@@ -391,10 +304,10 @@ export default {
 
 .animated-gradients {
     position: absolute;
-    top: 64%;
-    left: 28%;
+    top: 50%;
+    left: 16%;
     transform: translate(-50%, -50%);
-    z-index: -1;
+    z-index: 0;
     pointer-events: none;
     width: var(--size, 750px);
     height: var(--size, 750px);
@@ -431,7 +344,7 @@ export default {
 }
 
 .gradient-0 {
-    background-image: linear-gradient(rgba(255, 187, 0, 0.32), rgba(231, 162, 0, 0.16));
+    background-image: linear-gradient(rgba(255, 187, 0, 0.4), rgba(231, 162, 0, 0.24));
 }
 
 .gradient-1 {
@@ -444,7 +357,7 @@ export default {
 
 @media (min-width: 720px) {
     .gradient {
-        --size: 56vw;
+        --size: 64vw;
     }
 }
 
