@@ -26,7 +26,7 @@ export default {
     },
     computed: {
         isMobile() {
-            return this.windowWidth <= 768
+            return this.windowWidth <= 600
         },
         columnCount() {
             return this.isMobile ? 4 : 8
@@ -151,11 +151,13 @@ export default {
     border: 1px solid rgba(239, 100, 46, 0.2);
 }
 
-@media (max-width: 1024px) {
+/* Pas besoin de règle spécifique pour tablet car les variables CSS s'adaptent automatiquement */
+
+/* Seulement si vous avez besoin d'ajustements spécifiques au mobile */
+@media (max-width: 600px) {
     .grid-overlay-inner {
-        grid-template-columns: repeat(var(--grid-columns), 1fr);
-        gap: 16px;
-        padding: 0 8px;
+        /* Les variables --grid-columns, --grid-margin et --grid-gutter 
+           se mettent automatiquement à jour grâce au design-system.css */
     }
 }
 </style>
