@@ -14,11 +14,35 @@
 
         <div class="audio-sources-display">
             <div class="video-container">
-                <video v-for="(video, index) in videos" :key="index" :ref="el => setVideoRef(el, index)" :src="video"
-                    class="video-element" :class="{ 'video-active': index === activeButtonIndex }"
-                    :autoplay="index === 0" loop muted playsinline @loadeddata="onVideoLoaded(index)"
-                    @canplay="onVideoCanPlay(index)">
-                </video>
+                <!-- Mode Desktop : Multiple vidéos avec crossfade -->
+                <template v-if="!isMobile">
+                    <video v-for="(video, index) in videos" :key="index" :ref="el => setVideoRef(el, index)" :src="video"
+                        class="video-element" 
+                        :class="{ 
+                            'video-active': index === activeButtonIndex,
+                            'video-previous': index === previousButtonIndex && previousButtonIndex !== null
+                        }"
+                        :autoplay="index === 0" loop muted playsinline @loadeddata="onVideoLoaded(index)"
+                        @canplay="onVideoCanPlay(index)">
+                    </video>
+                </template>
+
+                <!-- Mode Mobile : Une seule vidéo avec fade simple -->
+                <template v-else>
+                    <video 
+                        ref="mobileVideo"
+                        :src="mobileVideoSrc"
+                        class="video-element mobile-video"
+                        :class="{ 'mobile-video-hidden': isTransitioning }"
+                        autoplay
+                        loop 
+                        muted 
+                        playsinline
+                        webkit-playsinline
+                        preload="auto"
+                        @canplay="onMobileVideoReady">
+                    </video>
+                </template>
             </div>
 
             <div class="buttons-scroll-wrapper">
@@ -62,6 +86,10 @@ export default {
             bluetoothIcon,
             macosIcon,
             activeButtonIndex: 0,
+            previousButtonIndex: null, // Pour gérer le crossfade desktop
+            isMobile: false,
+            isTransitioning: false,
+            mobileVideoSrc: '/src/assets/videos/spotify-demo.mp4', // Source séparée pour contrôler le timing
             videoRefs: {},
             videosLoaded: {},
             videos: [
@@ -76,35 +104,49 @@ export default {
             ]
         }
     },
+    mounted() {
+        // Détection mobile (iOS + Android)
+        this.isMobile = this.detectMobile()
+        console.log('Mobile device detected:', this.isMobile)
+    },
     watch: {
         activeButtonIndex(newIndex, oldIndex) {
-            this.manageVideoPlayback(newIndex, oldIndex)
+            if (!this.isMobile) {
+                this.manageDesktopVideoPlayback(newIndex, oldIndex)
+            } else {
+                this.manageMobileVideoPlayback()
+            }
         }
     },
     methods: {
+        detectMobile() {
+            // Détection iOS et Android
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera
+            const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream
+            const isAndroid = /android/i.test(userAgent)
+            const isMobileUserAgent = /Mobi|Android/i.test(userAgent)
+            
+            return isIOS || isAndroid || isMobileUserAgent
+        },
+
         setActiveButton(index) {
             this.activeButtonIndex = index
 
             // Scroll automatique sur mobile
             this.$nextTick(() => {
-                // Vérifier si on est sur mobile (même breakpoint que le CSS)
-                const isMobile = window.matchMedia('(max-width: 600px)').matches
+                const isMobileScreen = window.matchMedia('(max-width: 600px)').matches
 
-                if (isMobile) {
+                if (isMobileScreen) {
                     const scrollWrapper = this.$el.querySelector('.buttons-scroll-wrapper')
                     const buttons = this.$el.querySelectorAll('.audio-button')
                     const clickedButton = buttons[index]
 
                     if (scrollWrapper && clickedButton) {
-                        // Calculer la position pour centrer le bouton
                         const buttonLeft = clickedButton.offsetLeft
                         const buttonWidth = clickedButton.offsetWidth
                         const wrapperWidth = scrollWrapper.offsetWidth
-
-                        // Position pour centrer le bouton
                         const scrollPosition = buttonLeft - (wrapperWidth / 2) + (buttonWidth / 2)
 
-                        // Scroll manuel du conteneur spécifique
                         scrollWrapper.scrollTo({
                             left: scrollPosition,
                             behavior: 'smooth'
@@ -114,6 +156,7 @@ export default {
             })
         },
 
+        // === LOGIQUE DESKTOP (code original) ===
         setVideoRef(el, index) {
             if (el) {
                 this.videoRefs[index] = el
@@ -125,31 +168,47 @@ export default {
             if (activeVideo && this.videosLoaded[this.activeButtonIndex]) {
                 activeVideo.currentTime = 0
                 activeVideo.play().catch(error => {
-                    console.log('Video play failed:', error)
+                    console.log('Desktop video play failed:', error)
                 })
             }
         },
 
-        manageVideoPlayback(activeIndex, previousIndex) {
-            // Pause and reset all videos except the active one
+        manageDesktopVideoPlayback(activeIndex, previousIndex) {
+            console.log(`Desktop crossfade: ${previousIndex} → ${activeIndex}`)
+            
+            // Garder trace de la vidéo précédente pour le crossfade
+            this.previousButtonIndex = previousIndex
+            
+            // Pause and reset all videos except active and previous
             Object.keys(this.videoRefs).forEach(index => {
                 const video = this.videoRefs[index]
                 const idx = parseInt(index)
-                if (video && idx !== activeIndex) {
+                if (video && idx !== activeIndex && idx !== previousIndex) {
                     video.pause()
                     video.currentTime = 0
                 }
             })
 
-            // Play the active video
+            // Play the new active video
             this.playActiveVideo()
+            
+            // Après la transition, nettoyer la vidéo précédente
+            setTimeout(() => {
+                if (this.previousButtonIndex !== null) {
+                    const previousVideo = this.videoRefs[this.previousButtonIndex]
+                    if (previousVideo) {
+                        previousVideo.pause()
+                        previousVideo.currentTime = 0
+                    }
+                    this.previousButtonIndex = null
+                }
+            }, 400) // Durée de la transition CSS
         },
 
         onVideoLoaded(index) {
-            console.log(`Video ${index} loaded and ready`)
+            console.log(`Desktop video ${index} loaded`)
             this.videosLoaded[index] = true
 
-            // If this is not the active video, pause it and reset to beginning
             if (index !== this.activeButtonIndex) {
                 const video = this.videoRefs[index]
                 if (video) {
@@ -160,16 +219,50 @@ export default {
         },
 
         onVideoCanPlay(index) {
-            console.log(`Video ${index} can play`)
-            // Make sure the active video is playing
+            console.log(`Desktop video ${index} can play`)
             if (index === this.activeButtonIndex) {
                 const video = this.videoRefs[index]
                 if (video && video.paused) {
                     video.currentTime = 0
                     video.play().catch(error => {
-                        console.log('Video autoplay failed:', error)
+                        console.log('Desktop video autoplay failed:', error)
                     })
                 }
+            }
+        },
+
+        // === LOGIQUE MOBILE (fade-out complet → changement src → fade-in) ===
+        manageMobileVideoPlayback() {
+            if (this.isTransitioning) return
+            
+            console.log(`Mobile fade-out current video`)
+            
+            // 1. Fade-out de la vidéo courante
+            this.isTransitioning = true
+            
+            // 2. Après le fade-out, changer la source
+            setTimeout(() => {
+                console.log(`Mobile changing src to video ${this.activeButtonIndex}`)
+                this.mobileVideoSrc = this.videos[this.activeButtonIndex]
+            }, 200) // Durée du fade-out CSS
+        },
+
+        onMobileVideoReady() {
+            if (!this.isTransitioning) return
+            
+            console.log(`Mobile video ready, fade-in`)
+            
+            const video = this.$refs.mobileVideo
+            if (video) {
+                video.currentTime = 0
+                video.play().then(() => {
+                    // 3. Fade-in
+                    this.isTransitioning = false
+                }).catch(() => {
+                    this.isTransitioning = false
+                })
+            } else {
+                this.isTransitioning = false
             }
         }
     }
@@ -219,7 +312,6 @@ export default {
     display: flex;
     grid-column: 2 / -2;
     gap: var(--space-07);
-
     align-items: center;
     justify-content: center;
     z-index: 2;
@@ -233,6 +325,9 @@ export default {
     aspect-ratio: 7 / 4;
     box-shadow: 0px 12px 64px rgba(0, 0, 0, 0.16);
     flex: 1;
+    /* Force les dimensions pour éviter le flash mobile */
+    min-height: 200px; /* Hauteur minimum pour éviter le collapse */
+    width: 100%;
 }
 
 .video-element {
@@ -241,7 +336,7 @@ export default {
     object-fit: cover;
     display: block;
     opacity: 0;
-    transition: opacity 0.8s ease-in-out;
+    transition: opacity 0.4s ease-in-out;
 }
 
 .video-element:first-child {
@@ -256,6 +351,25 @@ export default {
 
 .video-element.video-active {
     opacity: 1;
+    z-index: 2; /* Nouvelle vidéo par-dessus */
+}
+
+.video-element.video-previous {
+    opacity: 0; /* Fade-out de l'ancienne vidéo */
+    z-index: 1; /* En dessous de la nouvelle */
+}
+
+/* Style spécifique mobile : fade simple */
+.mobile-video {
+    opacity: 1;
+    transition: opacity 0.4s ease-in-out;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+}
+
+.mobile-video-hidden {
+    opacity: 0;
 }
 
 .buttons-scroll-wrapper {
@@ -434,13 +548,11 @@ export default {
         padding-bottom: var(--space-03);
     }
 
-    /* Modifications pour le scroll horizontal */
     .buttons-scroll-wrapper {
         width: calc(100% + var(--space-06));
         overflow-x: auto;
         overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
-        /* Pour iOS */
     }
 
     .buttons-scroll-wrapper::-webkit-scrollbar {
@@ -454,10 +566,7 @@ export default {
         flex-wrap: nowrap;
         gap: var(--space-04);
         width: 100%;
-        /* Important : permet au container de s'étendre */
         padding: var(--space-06);
-        /* Padding calculé pour centrer le premier bouton */
-
     }
 
     .audio-button {

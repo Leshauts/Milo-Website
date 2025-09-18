@@ -171,7 +171,7 @@ export default {
 }
 
 /* === RESPONSIVE MOBILE === */
-@media (max-width: 1024px) {
+@media (max-width: 600px) {
     .section-video__container {
         /* Ratio 5:7 pour mobile */
         aspect-ratio: 5 / 7;
