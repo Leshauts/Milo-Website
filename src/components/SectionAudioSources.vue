@@ -538,7 +538,7 @@ export default {
     }
 
     .section-title {
-        grid-column: 1 / -1;
+        grid-column: 2 / -2;
         padding-bottom: var(--space-03);
     }
 
