@@ -83,7 +83,7 @@ export default {
     methods: {
         checkScreenSize() {
             const wasMobile = this.isMobile
-            this.isMobile = window.innerWidth <= 1024
+            this.isMobile = window.innerWidth <= 600
             
             // Si on change de device, on recharge la vidéo avec la bonne source
             if (wasMobile !== this.isMobile) {
