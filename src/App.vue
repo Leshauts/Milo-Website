@@ -7,24 +7,27 @@
 
   <SectionVideo desktop-video-src="/src/assets/videos/demo-desktop.mp4"
     mobile-video-src="/src/assets/videos/demo-mobile.mp4" :autoplay="false" />
-    
+
   <SectionAudioSources />
 
 
   <SectionSplit variant="default">
     <template #content>
-      <SectionTitle tag="Features" title="Streaming multiplateforme"
-        paragraph="Compatible avec Spotify Connect, AirPlay et Bluetooth. Contrôlez votre musique depuis n'importe quelle source." />
+      <SectionTitle tag="Multiroom" title="Music everywhere in your home"
+        paragraph="Create a perfectly synchronized multiroom ecosystem in every room. Smart group management, individual zone volume control, and simultaneous streaming with no noticeable lag."
+        align="left" />
     </template>
     <template #illustration>
       <!-- Animation future ici -->
     </template>
   </SectionSplit>
 
-  <SectionSplit variant="contrast" :reversed="true">
+
+  <SectionSplit reversed="true">
     <template #content>
-      <SectionTitle tag="Hardware" title="Amplification 60W"
-        paragraph="Puce audio haute qualité avec amplification intégrée pour alimenter vos enceintes préférées." />
+      <SectionTitle tag="Equalizer" title="Your passive speakers, perfectly balanced."
+        paragraph="Fine-tune your audio with 10 frequency bands (31Hz to 16kHz). Intuitive touch interface and real-time modifications to adapt the sound to your acoustics and tastes."
+        align="left" />
     </template>
     <template #illustration>
       <!-- Animation future ici -->
