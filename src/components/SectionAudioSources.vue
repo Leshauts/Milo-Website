@@ -1,4 +1,3 @@
-<!-- src / components / SectionAudioSources.vue -->
 <template>
     <section class="section-audio-sources">
         <div class="section-title">
@@ -8,32 +7,34 @@
             <h2 class="section-title__title h2">
                 Play audio from <span class="no-wrap"><img :src="spotifyIcon" alt="Spotify"
                         class="inline-icon" />Spotify</span>, <span class="no-wrap"><img :src="bluetoothIcon"
-                        alt="Bluetooth" class="inline-icon" />Bluetooth</span> or&nbsp;your <span
-                    class="no-wrap"><img :src="macosIcon" alt="Mac" class="inline-icon" />Mac</span>.
+                        alt="Bluetooth" class="inline-icon" />Bluetooth</span> or&nbsp;your <span class="no-wrap"><img
+                        :src="macosIcon" alt="Mac" class="inline-icon" />Mac</span>.
             </h2>
         </div>
 
         <div class="audio-sources-display">
             <div class="video-container">
-                <video v-for="(video, index) in videos" :key="index" :ref="el => setVideoRef(el, index)"
-                    :src="video" class="video-element" :class="{ 'video-active': index === activeButtonIndex }"
+                <video v-for="(video, index) in videos" :key="index" :ref="el => setVideoRef(el, index)" :src="video"
+                    class="video-element" :class="{ 'video-active': index === activeButtonIndex }"
                     :autoplay="index === 0" loop muted playsinline @loadeddata="onVideoLoaded(index)"
                     @canplay="onVideoCanPlay(index)">
                 </video>
             </div>
 
-            <div class="buttons-container">
-                <button v-for="(button, index) in buttons" :key="index" class="audio-button"
-                    :class="{ 'audio-button--active': activeButtonIndex === index }"
-                    @click="setActiveButton(index)">
-                    <div class="button-icon-container">
-                        <img :src="button.iconMono" :alt="button.name + ' mono icon'"
-                            class="button-icon button-icon--mono" />
-                        <img :src="button.iconColor" :alt="button.name + ' color icon'"
-                            class="button-icon button-icon--color" />
-                    </div>
-                    {{ button.name }}
-                </button>
+            <div class="buttons-scroll-wrapper">
+                <div class="buttons-container">
+                    <button v-for="(button, index) in buttons" :key="index" class="audio-button"
+                        :class="{ 'audio-button--active': activeButtonIndex === index }"
+                        @click="setActiveButton(index)">
+                        <div class="button-icon-container">
+                            <img :src="button.iconMono" :alt="button.name + ' mono icon'"
+                                class="button-icon button-icon--mono" />
+                            <img :src="button.iconColor" :alt="button.name + ' color icon'"
+                                class="button-icon button-icon--color" />
+                        </div>
+                        {{ button.name }}
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -83,6 +84,34 @@ export default {
     methods: {
         setActiveButton(index) {
             this.activeButtonIndex = index
+
+            // Scroll automatique sur mobile
+            this.$nextTick(() => {
+                // Vérifier si on est sur mobile (même breakpoint que le CSS)
+                const isMobile = window.matchMedia('(max-width: 600px)').matches
+
+                if (isMobile) {
+                    const scrollWrapper = this.$el.querySelector('.buttons-scroll-wrapper')
+                    const buttons = this.$el.querySelectorAll('.audio-button')
+                    const clickedButton = buttons[index]
+
+                    if (scrollWrapper && clickedButton) {
+                        // Calculer la position pour centrer le bouton
+                        const buttonLeft = clickedButton.offsetLeft
+                        const buttonWidth = clickedButton.offsetWidth
+                        const wrapperWidth = scrollWrapper.offsetWidth
+
+                        // Position pour centrer le bouton
+                        const scrollPosition = buttonLeft - (wrapperWidth / 2) + (buttonWidth / 2)
+
+                        // Scroll manuel du conteneur spécifique
+                        scrollWrapper.scrollTo({
+                            left: scrollPosition,
+                            behavior: 'smooth'
+                        })
+                    }
+                }
+            })
         },
 
         setVideoRef(el, index) {
@@ -153,31 +182,25 @@ export default {
     display: grid;
     grid-template-columns: subgrid;
     grid-column: 1 / -1;
-    grid-template-rows: auto 1fr;
     background-color: var(--color-background-neutral);
     border-radius: var(--border-radius-large);
-    min-height: 600px;
+    padding: var(--space-09);
     overflow: hidden;
 }
 
 .section-title {
-    display: grid;
-    grid-template-columns: subgrid;
-    grid-column: 2 / -2;
-    margin-top: var(--space-09);
+    grid-column: 3 / -3;
     text-align: center;
-    z-index: 2;;
+    padding-bottom: var(--space-07);
+    z-index: 2;
 }
 
 .section-title__tag {
-    grid-column: 2 / -2;
     color: var(--color-brand);
     margin-bottom: var(--space-03);
-    display: block;
 }
 
 .section-title__title {
-    grid-column: 2 / -2;
     color: var(--color-text);
 }
 
@@ -194,24 +217,22 @@ export default {
 
 .audio-sources-display {
     display: flex;
-    grid-column: inherit;
+    grid-column: 2 / -2;
+    gap: var(--space-07);
+
     align-items: center;
     justify-content: center;
-    gap: var(--space-08);
-    max-height: 100%;
     z-index: 2;
-    overflow: hidden;
-    padding: var(--space-08) var(--space-10) var(--space-10) var(--space-10);
 }
 
 .video-container {
     position: relative;
     border-radius: var(--border-radius-xxlarge);
     overflow: hidden;
-    max-height: 100%;
     max-width: 1024px;
     aspect-ratio: 7 / 4;
     box-shadow: 0px 12px 64px rgba(0, 0, 0, 0.16);
+    flex: 1;
 }
 
 .video-element {
@@ -237,13 +258,15 @@ export default {
     opacity: 1;
 }
 
+.buttons-scroll-wrapper {
+    flex-shrink: 0;
+}
+
 .buttons-container {
     display: flex;
     flex-direction: column;
     gap: var(--space-04);
     align-items: flex-start;
-    flex-shrink: 0;
-    min-width: 24%;
 }
 
 .audio-button {
@@ -252,7 +275,7 @@ export default {
     border: none;
     box-shadow: 0px 2px 32px rgba(0, 0, 0, 0.08);
     color: var(--color-text-secondary);
-    padding: var(--space-03);
+    padding: var(--space-03) var(--space-07) var(--space-03) var(--space-03);
     border-radius: var(--border-radius-medium);
     cursor: pointer;
     transition: color 0.3s ease;
@@ -309,8 +332,8 @@ export default {
     transform: translate(-50%, -50%);
     z-index: 0;
     pointer-events: none;
-    width: var(--size, 750px);
-    height: var(--size, 750px);
+    width: 750px;
+    height: 750px;
 }
 
 @keyframes rotate {
@@ -324,16 +347,13 @@ export default {
 }
 
 .gradient {
-    --size: 750px;
-    --speed: 15s;
-    --easing: cubic-bezier(0.8, 0.2, 0.2, 0.8);
     position: absolute;
     top: 0;
     left: 0;
-    width: var(--size);
-    height: var(--size);
-    filter: blur(calc(var(--size) / 5));
-    animation: rotate var(--speed) linear infinite;
+    width: 750px;
+    height: 750px;
+    filter: blur(150px);
+    animation: rotate 15s linear infinite;
     border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
     opacity: 0;
     transition: opacity 0.6s ease;
@@ -356,31 +376,35 @@ export default {
 }
 
 @media (min-width: 720px) {
+    .animated-gradients {
+        width: 64vw;
+        height: 64vw;
+    }
+
     .gradient {
-        --size: 64vw;
+        width: 64vw;
+        height: 64vw;
+        filter: blur(calc(64vw / 5));
     }
 }
 
-@media (max-width: 1280px) {
-    .section-title {
-        margin-top: var(--space-08);
-    }
-
-    .section-title__tag,
-    .section-title__title {
-        grid-column: 1 / -1;
+@media (max-width: 1024px) {
+    .section-audio-sources {
+        padding: var(--space-09) var(--space-07);
     }
 
     .audio-sources-display {
-        flex-direction: column-reverse;
-        gap: var(--space-05);
-        padding: var(--space-07) var(--space-08) var(--space-08) var(--space-08);
+        grid-column: 1 / -1;
+        width: 100%;
     }
 
-    .buttons-container {
-        flex-direction: row;
-        justify-content: center;
-        width: 100%;
+    .buttons-scroll-wrapper::-webkit-scrollbar {
+        display: none;
+    }
+
+    .audio-button {
+        white-space: nowrap;
+        flex-shrink: 0;
     }
 
     .button-icon-container {
@@ -395,23 +419,49 @@ export default {
 }
 
 @media (max-width: 600px) {
-    .section-title {
-        grid-column: 1 / -1;
-    }
-
     .section-audio-sources {
-        min-height: 500px;
+        padding: var(--space-09) var(--space-03);
     }
 
     .audio-sources-display {
+        display: flex;
         flex-direction: column-reverse;
-        gap: var(--space-05);
+        gap: inherit;
+    }
+
+    .section-title {
+        grid-column: 1 / -1;
+        padding-bottom: var(--space-03);
+    }
+
+    /* Modifications pour le scroll horizontal */
+    .buttons-scroll-wrapper {
+        width: calc(100% + var(--space-06));
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        /* Pour iOS */
+    }
+
+    .buttons-scroll-wrapper::-webkit-scrollbar {
+        display: none;
     }
 
     .buttons-container {
+        display: flex;
         flex-direction: row;
-        justify-content: center;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        gap: var(--space-04);
         width: 100%;
+        /* Important : permet au container de s'étendre */
+        padding: var(--space-06);
+        /* Padding calculé pour centrer le premier bouton */
+
+    }
+
+    .audio-button {
+        width: auto;
     }
 
     .button-icon-container {
