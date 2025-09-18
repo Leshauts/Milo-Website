@@ -16,31 +16,20 @@
             <div class="video-container">
                 <!-- Mode Desktop : Multiple vidéos avec crossfade -->
                 <template v-if="!isMobile">
-                    <video v-for="(video, index) in videos" :key="index" :ref="el => setVideoRef(el, index)" :src="video"
-                        class="video-element" 
-                        :class="{ 
+                    <video v-for="(video, index) in videos" :key="index" :ref="el => setVideoRef(el, index)"
+                        :src="video" class="video-element" :class="{
                             'video-active': index === activeButtonIndex,
                             'video-previous': index === previousButtonIndex && previousButtonIndex !== null
-                        }"
-                        :autoplay="index === 0" loop muted playsinline @loadeddata="onVideoLoaded(index)"
+                        }" :autoplay="index === 0" loop muted playsinline @loadeddata="onVideoLoaded(index)"
                         @canplay="onVideoCanPlay(index)">
                     </video>
                 </template>
 
                 <!-- Mode Mobile : Une seule vidéo avec fade simple -->
                 <template v-else>
-                    <video 
-                        ref="mobileVideo"
-                        :src="mobileVideoSrc"
-                        class="video-element mobile-video"
-                        :class="{ 'mobile-video-hidden': isTransitioning }"
-                        autoplay
-                        loop 
-                        muted 
-                        playsinline
-                        webkit-playsinline
-                        preload="auto"
-                        @canplay="onMobileVideoReady">
+                    <video ref="mobileVideo" :src="mobileVideoSrc" class="video-element mobile-video"
+                        :class="{ 'mobile-video-hidden': isTransitioning }" autoplay loop muted playsinline
+                        webkit-playsinline preload="auto" @canplay="onMobileVideoReady">
                     </video>
                 </template>
             </div>
@@ -125,7 +114,7 @@ export default {
             const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream
             const isAndroid = /android/i.test(userAgent)
             const isMobileUserAgent = /Mobi|Android/i.test(userAgent)
-            
+
             return isIOS || isAndroid || isMobileUserAgent
         },
 
@@ -175,10 +164,10 @@ export default {
 
         manageDesktopVideoPlayback(activeIndex, previousIndex) {
             console.log(`Desktop crossfade: ${previousIndex} → ${activeIndex}`)
-            
+
             // Garder trace de la vidéo précédente pour le crossfade
             this.previousButtonIndex = previousIndex
-            
+
             // Pause and reset all videos except active and previous
             Object.keys(this.videoRefs).forEach(index => {
                 const video = this.videoRefs[index]
@@ -191,7 +180,7 @@ export default {
 
             // Play the new active video
             this.playActiveVideo()
-            
+
             // Après la transition, nettoyer la vidéo précédente
             setTimeout(() => {
                 if (this.previousButtonIndex !== null) {
@@ -234,12 +223,12 @@ export default {
         // === LOGIQUE MOBILE (fade-out complet → changement src → fade-in) ===
         manageMobileVideoPlayback() {
             if (this.isTransitioning) return
-            
+
             console.log(`Mobile fade-out current video`)
-            
+
             // 1. Fade-out de la vidéo courante
             this.isTransitioning = true
-            
+
             // 2. Après le fade-out, changer la source
             setTimeout(() => {
                 console.log(`Mobile changing src to video ${this.activeButtonIndex}`)
@@ -249,9 +238,9 @@ export default {
 
         onMobileVideoReady() {
             if (!this.isTransitioning) return
-            
+
             console.log(`Mobile video ready, fade-in`)
-            
+
             const video = this.$refs.mobileVideo
             if (video) {
                 video.currentTime = 0
@@ -326,7 +315,8 @@ export default {
     box-shadow: 0px 12px 64px rgba(0, 0, 0, 0.16);
     flex: 1;
     /* Force les dimensions pour éviter le flash mobile */
-    min-height: 200px; /* Hauteur minimum pour éviter le collapse */
+    min-height: 200px;
+    /* Hauteur minimum pour éviter le collapse */
     width: 100%;
 }
 
@@ -351,12 +341,15 @@ export default {
 
 .video-element.video-active {
     opacity: 1;
-    z-index: 2; /* Nouvelle vidéo par-dessus */
+    z-index: 2;
+    /* Nouvelle vidéo par-dessus */
 }
 
 .video-element.video-previous {
-    opacity: 0; /* Fade-out de l'ancienne vidéo */
-    z-index: 1; /* En dessous de la nouvelle */
+    opacity: 0;
+    /* Fade-out de l'ancienne vidéo */
+    z-index: 1;
+    /* En dessous de la nouvelle */
 }
 
 /* Style spécifique mobile : fade simple */
@@ -401,6 +394,7 @@ export default {
     align-items: center;
     gap: var(--space-03);
 }
+
 
 .audio-button--active {
     color: var(--color-text);
@@ -489,7 +483,7 @@ export default {
     background-image: linear-gradient(rgba(163, 173, 194, 0.24), rgba(205, 221, 228, 0.48));
 }
 
-@media (min-width: 720px) {
+/* @media (min-width: 720px) {
     .animated-gradients {
         width: 64vw;
         height: 64vw;
@@ -500,7 +494,7 @@ export default {
         height: 64vw;
         filter: blur(calc(64vw / 5));
     }
-}
+} */
 
 @media (max-width: 1024px) {
     .section-audio-sources {
@@ -532,9 +526,9 @@ export default {
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 840px) {
     .section-audio-sources {
-        padding: var(--space-09) var(--space-03);
+        padding: var(--space-09) var(--space-06);
     }
 
     .audio-sources-display {
@@ -549,7 +543,7 @@ export default {
     }
 
     .buttons-scroll-wrapper {
-        width: calc(100% + var(--space-06));
+        width: calc(100% + var(--space-08));
         overflow-x: auto;
         overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
@@ -562,11 +556,17 @@ export default {
     .buttons-container {
         display: flex;
         flex-direction: row;
-        justify-content: flex-start;
+        justify-content: center;
         flex-wrap: nowrap;
         gap: var(--space-04);
         width: 100%;
         padding: var(--space-06);
+    }
+
+    .buttons-container::after {
+        content: '';
+        min-width: var(--space-03);
+        height: 1px;
     }
 
     .audio-button {
@@ -581,6 +581,26 @@ export default {
     .inline-icon {
         width: 20px;
         height: 20px;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .section-audio-sources {
+        padding: var(--space-09) var(--space-03);
+    }
+
+    .buttons-scroll-wrapper {
+        width: calc(100% + var(--space-06));
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .buttons-container {
+        justify-content: flex-start;
+
     }
 }
 </style>
