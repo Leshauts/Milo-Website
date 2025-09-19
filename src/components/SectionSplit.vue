@@ -88,10 +88,7 @@ export default {
   padding: 0 var(--space-08) 0 calc(var(--space-08) + 16px);
 }
 
-/* SectionTitle avec marge spécifique à SectionSplit */
-.section-split :deep(.section-title) {
-  margin-bottom: var(--space-06); /* 32px */
-}
+
 
 /* === ILLUSTRATION === */
 .section-split__illustration {

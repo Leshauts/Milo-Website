@@ -483,6 +483,7 @@ export default {
 @media (max-width: 840px) {
     .section-audio-sources {
         padding: var(--space-09) var(--space-06);
+        row-gap: 0;
     }
 
     .audio-sources-display {
@@ -509,7 +510,8 @@ export default {
         flex-wrap: nowrap;
         gap: var(--space-04);
         width: 100%;
-        padding: var(--space-06);
+        padding: var(--space-07) var(--space-06) var(--space-05) var(--space-06);
+
     }
 
     .buttons-container::after {
