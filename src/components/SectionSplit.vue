@@ -4,7 +4,7 @@
     <div class="section-split__content" :class="contentClass">
       <slot name="content" />
     </div>
-    
+
     <!-- Bloc illustration (carré) -->
     <div class="section-split__illustration" :class="illustrationClass">
       <slot name="illustration">
@@ -57,7 +57,7 @@ export default {
   grid-template-columns: subgrid;
   grid-column: 1 / -1;
   border-radius: var(--border-radius-large);
-  
+
   /* Configuration du contenu split */
   grid-template-columns: 1fr 1fr;
   align-items: center;
@@ -125,14 +125,15 @@ export default {
   .section-split {
     grid-template-columns: 1fr;
     gap: var(--space-06);
-    padding: var(--space-06) var(--space-04);
   }
-.section-title {
-  margin-bottom: 0;
-}
+
+  .section-title {
+    margin-bottom: 0;
+  }
+
   .section-split__content,
   .section-split__content--reversed {
-    padding: inherit;
+    padding: initial;
   }
 
   .section-split__illustration,

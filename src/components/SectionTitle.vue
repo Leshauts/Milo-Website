@@ -54,7 +54,7 @@ export default {
 <style scoped>
 .section-title {
   grid-column: 3 / -3;
-  margin-bottom: var(--space-07);
+  /* margin-bottom: var(--space-07); */
 }
 
 /* === ALIGNEMENT === */
