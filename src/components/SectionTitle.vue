@@ -156,7 +156,7 @@ export default {
 /* === RESPONSIVE MOBILE === */
 @media (max-width: 1024px) {
   .section-title {
-    grid-column: 1 / -1;
+    grid-column: 2 / -2;
   }
   
   .section-title__title .inline-icon {
