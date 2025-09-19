@@ -1,13 +1,30 @@
 <!-- src / components / SectionTitle.vue -->
 <template>
-  <div class="section-title" :class="[alignClass, variantClass]">
-    <div class="section-title__tag body-small">
+  <div class="section-title" :class="[alignClass, variantClass, sizeClass]">
+    <div class="section-title__tag" :class="tagClass">
       {{ tag }}
     </div>
-    <h2 class="section-title__title h2">
+    
+    <!-- Titre avec slot ou texte simple -->
+    <component 
+      :is="titleTag" 
+      class="section-title__title" 
+      :class="titleClass"
+      v-if="!$slots.title"
+    >
       {{ title }}
-    </h2>
-    <p v-if="paragraph" class="section-title__paragraph body-medium">
+    </component>
+    
+    <component 
+      :is="titleTag" 
+      class="section-title__title" 
+      :class="titleClass"
+      v-else
+    >
+      <slot name="title" />
+    </component>
+    
+    <p v-if="paragraph" class="section-title__paragraph" :class="paragraphClass">
       {{ paragraph }}
     </p>
   </div>
@@ -23,7 +40,7 @@ export default {
     },
     title: {
       type: String,
-      required: true
+      default: null
     },
     paragraph: {
       type: String,
@@ -38,6 +55,11 @@ export default {
       type: String,
       default: 'default',
       validator: (value) => ['default', 'contrast'].includes(value)
+    },
+    size: {
+      type: String,
+      default: 'section',
+      validator: (value) => ['main', 'section'].includes(value)
     }
   },
   computed: {
@@ -46,6 +68,21 @@ export default {
     },
     variantClass() {
       return `section-title--${this.variant}`
+    },
+    sizeClass() {
+      return `section-title--${this.size}`
+    },
+    titleTag() {
+      return this.size === 'main' ? 'h1' : 'h2'
+    },
+    titleClass() {
+      return this.size === 'main' ? 'h1' : 'h2'
+    },
+    tagClass() {
+      return this.size === 'main' ? 'body-large' : 'body-small'
+    },
+    paragraphClass() {
+      return this.size === 'main' ? 'body-large' : 'body-medium'
     }
   }
 }
@@ -54,7 +91,7 @@ export default {
 <style scoped>
 .section-title {
   grid-column: 3 / -3;
-  /* margin-bottom: var(--space-07); */
+  z-index: 99;
 }
 
 /* === ALIGNEMENT === */
@@ -78,11 +115,12 @@ export default {
 
 .section-title__title {
   color: var(--color-text);
-  margin-bottom: var(--space-05);
+  /* Pas de margin-bottom par défaut - géré par les composants parents */
 }
 
 .section-title__paragraph {
   color: var(--color-text-secondary);
+  margin-top: var(--space-05);
 }
 
 /* === VARIANTES DE COULEURS === */
@@ -94,10 +132,43 @@ export default {
   color: var(--color-text-light);
 }
 
+/* === VARIANTES DE TAILLES === */
+.section-title--main .section-title__tag {
+  margin-bottom: var(--space-04);
+}
+
+.section-title--section .section-title__tag {
+  margin-bottom: var(--space-03);
+}
+
+/* Styles spécifiques pour les icônes inline dans les titres */
+.section-title__title .inline-icon {
+  width: 32px;
+  height: 32px;
+  vertical-align: middle;
+  margin-right: var(--space-02);
+}
+
+.section-title__title .no-wrap {
+  white-space: nowrap;
+}
+
 /* === RESPONSIVE MOBILE === */
 @media (max-width: 1024px) {
   .section-title {
     grid-column: 1 / -1;
+  }
+  
+  .section-title__title .inline-icon {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .section-title__title .inline-icon {
+    width: 20px;
+    height: 20px;
   }
 }
 </style>

@@ -1,16 +1,17 @@
 <template>
     <section class="section-audio-sources">
-        <div class="section-title">
-            <div class="section-title__tag body-small">
-                Audio Sources
-            </div>
-            <h2 class="section-title__title h2">
-                Play audio from <span class="no-wrap"><img :src="spotifyIcon" alt="Spotify"
+        <SectionTitle
+            :tag="tag"
+            align="center"
+            size="section"
+        >
+            <template #title>
+                {{ titlePrefix }} <span class="no-wrap"><img :src="spotifyIcon" alt="Spotify"
                         class="inline-icon" />Spotify</span>, <span class="no-wrap"><img :src="bluetoothIcon"
                         alt="Bluetooth" class="inline-icon" />Bluetooth</span> or&nbsp;your <span class="no-wrap"><img
                         :src="macosIcon" alt="Mac" class="inline-icon" />Mac</span>.
-            </h2>
-        </div>
+            </template>
+        </SectionTitle>
 
         <div class="audio-sources-display">
             <div class="video-container">
@@ -60,6 +61,7 @@
 </template>
 
 <script>
+import SectionTitle from './SectionTitle.vue'
 import spotifyIcon from '../assets/icons/spotify-mono.svg'
 import bluetoothIcon from '../assets/icons/bluetooth-mono.svg'
 import macosIcon from '../assets/icons/macos-mono.svg'
@@ -69,16 +71,29 @@ import macosColor from '../assets/icons/macos-color.svg'
 
 export default {
     name: 'SectionAudioSources',
+    components: {
+        SectionTitle
+    },
+    props: {
+        tag: {
+            type: String,
+            required: true
+        },
+        titlePrefix: {
+            type: String,
+            required: true
+        }
+    },
     data() {
         return {
             spotifyIcon,
             bluetoothIcon,
             macosIcon,
             activeButtonIndex: 0,
-            previousButtonIndex: null, // Pour gérer le crossfade desktop
+            previousButtonIndex: null,
             isMobile: false,
             isTransitioning: false,
-            mobileVideoSrc: '/src/assets/videos/spotify-demo.mp4', // Source séparée pour contrôler le timing
+            mobileVideoSrc: '/src/assets/videos/spotify-demo.mp4',
             videoRefs: {},
             videosLoaded: {},
             videos: [
@@ -94,7 +109,6 @@ export default {
         }
     },
     mounted() {
-        // Détection mobile (iOS + Android)
         this.isMobile = this.detectMobile()
         console.log('Mobile device detected:', this.isMobile)
     },
@@ -109,7 +123,6 @@ export default {
     },
     methods: {
         detectMobile() {
-            // Détection iOS et Android
             const userAgent = navigator.userAgent || navigator.vendor || window.opera
             const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream
             const isAndroid = /android/i.test(userAgent)
@@ -121,7 +134,6 @@ export default {
         setActiveButton(index) {
             this.activeButtonIndex = index
 
-            // Scroll automatique sur mobile
             this.$nextTick(() => {
                 const isMobileScreen = window.matchMedia('(max-width: 600px)').matches
 
@@ -145,7 +157,6 @@ export default {
             })
         },
 
-        // === LOGIQUE DESKTOP (code original) ===
         setVideoRef(el, index) {
             if (el) {
                 this.videoRefs[index] = el
@@ -165,10 +176,8 @@ export default {
         manageDesktopVideoPlayback(activeIndex, previousIndex) {
             console.log(`Desktop crossfade: ${previousIndex} → ${activeIndex}`)
 
-            // Garder trace de la vidéo précédente pour le crossfade
             this.previousButtonIndex = previousIndex
 
-            // Pause and reset all videos except active and previous
             Object.keys(this.videoRefs).forEach(index => {
                 const video = this.videoRefs[index]
                 const idx = parseInt(index)
@@ -178,10 +187,8 @@ export default {
                 }
             })
 
-            // Play the new active video
             this.playActiveVideo()
 
-            // Après la transition, nettoyer la vidéo précédente
             setTimeout(() => {
                 if (this.previousButtonIndex !== null) {
                     const previousVideo = this.videoRefs[this.previousButtonIndex]
@@ -191,7 +198,7 @@ export default {
                     }
                     this.previousButtonIndex = null
                 }
-            }, 400) // Durée de la transition CSS
+            }, 400)
         },
 
         onVideoLoaded(index) {
@@ -220,20 +227,17 @@ export default {
             }
         },
 
-        // === LOGIQUE MOBILE (fade-out complet → changement src → fade-in) ===
         manageMobileVideoPlayback() {
             if (this.isTransitioning) return
 
             console.log(`Mobile fade-out current video`)
 
-            // 1. Fade-out de la vidéo courante
             this.isTransitioning = true
 
-            // 2. Après le fade-out, changer la source
             setTimeout(() => {
                 console.log(`Mobile changing src to video ${this.activeButtonIndex}`)
                 this.mobileVideoSrc = this.videos[this.activeButtonIndex]
-            }, 200) // Durée du fade-out CSS
+            }, 200)
         },
 
         onMobileVideoReady() {
@@ -245,7 +249,6 @@ export default {
             if (video) {
                 video.currentTime = 0
                 video.play().then(() => {
-                    // 3. Fade-in
                     this.isTransitioning = false
                 }).catch(() => {
                     this.isTransitioning = false
@@ -264,38 +267,14 @@ export default {
     display: grid;
     grid-template-columns: subgrid;
     grid-column: 1 / -1;
+    row-gap: var(--space-08);
     background-color: var(--color-background-neutral);
     border-radius: var(--border-radius-large);
     padding: var(--space-09);
     overflow: hidden;
 }
 
-.section-title {
-    grid-column: 3 / -3;
-    text-align: center;
-    padding-bottom: var(--space-07);
-    z-index: 2;
-}
 
-.section-title__tag {
-    color: var(--color-brand);
-    margin-bottom: var(--space-03);
-}
-
-.section-title__title {
-    color: var(--color-text);
-}
-
-.inline-icon {
-    width: 32px;
-    height: 32px;
-    vertical-align: middle;
-    margin-right: var(--space-02);
-}
-
-.no-wrap {
-    white-space: nowrap;
-}
 
 .audio-sources-display {
     display: flex;
@@ -314,9 +293,7 @@ export default {
     aspect-ratio: 7 / 4;
     box-shadow: 0px 12px 64px rgba(0, 0, 0, 0.16);
     flex: 1;
-    /* Force les dimensions pour éviter le flash mobile */
     min-height: 200px;
-    /* Hauteur minimum pour éviter le collapse */
     width: 100%;
 }
 
@@ -342,17 +319,13 @@ export default {
 .video-element.video-active {
     opacity: 1;
     z-index: 2;
-    /* Nouvelle vidéo par-dessus */
 }
 
 .video-element.video-previous {
     opacity: 0;
-    /* Fade-out de l'ancienne vidéo */
     z-index: 1;
-    /* En dessous de la nouvelle */
 }
 
-/* Style spécifique mobile : fade simple */
 .mobile-video {
     opacity: 1;
     transition: opacity 0.4s ease-in-out;
@@ -394,7 +367,6 @@ export default {
     align-items: center;
     gap: var(--space-03);
 }
-
 
 .audio-button--active {
     color: var(--color-text);
@@ -483,19 +455,6 @@ export default {
     background-image: linear-gradient(rgba(163, 173, 194, 0.24), rgba(205, 221, 228, 0.48));
 }
 
-/* @media (min-width: 720px) {
-    .animated-gradients {
-        width: 64vw;
-        height: 64vw;
-    }
-
-    .gradient {
-        width: 64vw;
-        height: 64vw;
-        filter: blur(calc(64vw / 5));
-    }
-} */
-
 @media (max-width: 1024px) {
     .section-audio-sources {
         padding: var(--space-09) var(--space-07);
@@ -519,11 +478,6 @@ export default {
         width: 32px;
         height: 32px;
     }
-
-    .inline-icon {
-        width: 24px;
-        height: 24px;
-    }
 }
 
 @media (max-width: 840px) {
@@ -535,11 +489,6 @@ export default {
         display: flex;
         flex-direction: column-reverse;
         gap: inherit;
-    }
-
-    .section-title {
-        grid-column: 2 / -2;
-        padding-bottom: var(--space-03);
     }
 
     .buttons-scroll-wrapper {
@@ -577,16 +526,9 @@ export default {
         width: 24px;
         height: 24px;
     }
-
-    .inline-icon {
-        width: 20px;
-        height: 20px;
-    }
 }
 
-
 @media (max-width: 600px) {
-
     .section-audio-sources {
         padding: var(--space-09) var(--space-03);
     }
@@ -600,7 +542,6 @@ export default {
 
     .buttons-container {
         justify-content: flex-start;
-
     }
 }
 </style>

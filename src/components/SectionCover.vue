@@ -10,18 +10,14 @@
             <img :src="coverImage" alt="Cover" class="cover-image" />
         </div>
 
-        <!-- SectionTitle main intégré -->
-        <div class="section-title-main">
-            <div class="section-title-main__tag body-large">
-                {{ tag }}
-            </div>
-            <h1 class="section-title-main__title h1">
-                {{ title }}
-            </h1>
-            <p class="section-title-main__paragraph body-large">
-                {{ paragraph }}
-            </p>
-        </div>
+        <!-- SectionTitle utilisé avec size="main" -->
+        <SectionTitle 
+            :tag="tag"
+            :title="title"
+            :paragraph="paragraph"
+            size="main"
+            align="center"
+        />
 
         <!-- Grid des 8 features -->
         <div class="features-grid">
@@ -39,6 +35,7 @@
 
 <script>
 import FeatureItem from './FeatureItem.vue'
+import SectionTitle from './SectionTitle.vue'
 import spotifyIcon from '../assets/icons/spotify.svg'
 import bluetoothIcon from '../assets/icons/bluetooth.svg'
 import macosIcon from '../assets/icons/macos.svg'
@@ -53,7 +50,8 @@ import coverImage from '../assets/images/cover.png'
 export default {
     name: 'SectionCover',
     components: {
-        FeatureItem
+        FeatureItem,
+        SectionTitle
     },
     props: {
         tag: {
@@ -123,26 +121,9 @@ export default {
     border-radius: var(--border-radius-medium);
 }
 
-/* SectionTitle main intégré */
-.section-title-main {
-    grid-column: 3 / -3;
-    margin-bottom: var(--space-07);
-    text-align: center;
-}
-
-.section-title-main__tag {
-    color: var(--color-brand);
-    margin-bottom: var(--space-03);
-    display: block;
-}
-
-.section-title-main__title {
-    color: var(--color-text);
-    margin-bottom: var(--space-05);
-}
-
-.section-title-main__paragraph {
-    color: var(--color-text-secondary);
+/* SectionTitle avec marge spécifique à SectionCover */
+.section-cover :deep(.section-title) {
+    margin-bottom: var(--space-07); /* 48px */
 }
 
 /* Grid des features */
@@ -155,10 +136,6 @@ export default {
 
 /* === RESPONSIVE MOBILE === */
 @media (max-width: 1024px) {
-    .section-title-main {
-        grid-column: 1 / -1;
-    }
-
     .section-cover__image {
         grid-column: 1 / 9;
     }
@@ -174,10 +151,8 @@ export default {
 }
 
 @media (max-width: 600px) {
-
     .section-cover__image {
         grid-column: 1 / 5;
     }
-
 }
 </style>
