@@ -1,10 +1,6 @@
 <template>
     <section class="section-audio-sources">
-        <SectionTitle
-            :tag="tag"
-            align="center"
-            size="section"
-        >
+        <SectionTitle :tag="tag" align="center" size="section">
             <template #title>
                 {{ titlePrefix }} <span class="no-wrap"><img :src="spotifyIcon" alt="Spotify"
                         class="inline-icon" />Spotify</span>, <span class="no-wrap"><img :src="bluetoothIcon"
@@ -262,6 +258,17 @@ export default {
 </script>
 
 <style scoped>
+.no-wrap {
+    display: inline-block;
+}
+
+.inline-icon {
+    width: 32px;
+    margin-right: var(--space-01);
+    margin-left: 2px;
+}
+
+
 .section-audio-sources {
     position: relative;
     display: grid;
@@ -273,7 +280,6 @@ export default {
     padding: var(--space-09);
     overflow: hidden;
 }
-
 
 
 .audio-sources-display {
@@ -456,6 +462,10 @@ export default {
 }
 
 @media (max-width: 1024px) {
+    .inline-icon {
+        width: 24px;
+    }
+
     .section-audio-sources {
         padding: var(--space-09) var(--space-07);
     }
@@ -531,6 +541,10 @@ export default {
 }
 
 @media (max-width: 600px) {
+    .inline-icon {
+        width: 20px;
+    }
+
     .section-audio-sources {
         padding: var(--space-09) var(--space-03);
     }
