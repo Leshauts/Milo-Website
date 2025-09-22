@@ -170,5 +170,8 @@ export default {
     width: 20px;
     height: 20px;
   }
+    .section-title {
+    grid-column: 1 / -1;
+  }
 }
 </style>
