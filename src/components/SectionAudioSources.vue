@@ -70,9 +70,9 @@ export default {
                 '/src/assets/videos/audio-sources/mac-audio-demo.mp4'
             ],
             buttons: [
-                { name: 'Spotify', iconColor: spotifyColor, iconMono: spotifyIcon },
+                { name: 'Spotify Connect', iconColor: spotifyColor, iconMono: spotifyIcon },
                 { name: 'Bluetooth', iconColor: bluetoothColor, iconMono: bluetoothIcon },
-                { name: 'Mac Audio', iconColor: macosColor, iconMono: macosIcon }
+                { name: 'Mac Audio Receiver', iconColor: macosColor, iconMono: macosIcon }
             ]
         }
     },
@@ -265,7 +265,7 @@ export default {
 .buttons-container {
     display: flex;
     flex-direction: column;
-    gap: var(--space-04);
+    gap: var(--space-02);
     align-items: flex-start;
 }
 
@@ -275,7 +275,7 @@ export default {
     border: none;
     box-shadow: 0px 2px 32px rgba(0, 0, 0, 0.08);
     color: var(--color-text-secondary);
-    padding: var(--space-03) var(--space-07) var(--space-03) var(--space-03);
+    padding: var(--space-03) var(--space-06) var(--space-03) var(--space-03);
     border-radius: var(--border-radius-medium);
     cursor: pointer;
     transition: color 0.3s ease;
@@ -332,8 +332,8 @@ export default {
     transform: translate(-50%, -50%);
     z-index: 0;
     pointer-events: none;
-    width: 750px;
-    height: 750px;
+    width: 64vw;
+    height: 64vw;
 }
 
 @keyframes rotate {
@@ -348,11 +348,11 @@ export default {
 
 .gradient {
     position: absolute;
+    width: 64vw;
+    height: 64vw;
     top: 0;
     left: 0;
-    width: 750px;
-    height: 750px;
-    filter: blur(150px);
+    filter: blur(calc(64vw / 5));
     animation: rotate 15s linear infinite;
     border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
     opacity: 0;
@@ -375,16 +375,17 @@ export default {
     background-image: linear-gradient(rgba(163, 173, 194, 0.24), rgba(205, 221, 228, 0.48));
 }
 
-@media (min-width: 720px) {
+@media (max-width: 680px) {
     .animated-gradients {
-        width: 64vw;
-        height: 64vw;
+        left: 50%;
+        width: 120vw;
+        height: 120vw;
     }
 
     .gradient {
-        width: 64vw;
-        height: 64vw;
-        filter: blur(calc(64vw / 5));
+        width: 120vw;
+        height: 120vw;
+        filter: blur(calc(120vw / 5));
     }
 }
 
@@ -396,6 +397,7 @@ export default {
     .audio-sources-display {
         grid-column: 1 / -1;
         width: 100%;
+        gap: var(--space-06);
     }
 
     .buttons-scroll-wrapper::-webkit-scrollbar {
@@ -418,7 +420,7 @@ export default {
     }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 680px) {
     .section-audio-sources {
         padding: var(--space-09) var(--space-03);
     }
