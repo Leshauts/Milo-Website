@@ -63,6 +63,5 @@ coverage/
 tmp/
 temp/
 
-# Large files
-src/assets/videos/
+
 
