@@ -16,7 +16,7 @@
             <div class="video-container">
                 <video v-for="(video, index) in videos" :key="index" :ref="el => setVideoRef(el, index)" :src="video"
                     class="video-element" :class="{ 'video-active': index === activeButtonIndex }"
-                    :autoplay="index === 0" loop muted playsinline @loadeddata="onVideoLoaded(index)"
+                    :autoplay="index === 0" loop muted playsinline preload="auto" @loadeddata="onVideoLoaded(index)"
                     @canplay="onVideoCanPlay(index)">
                 </video>
             </div>
@@ -122,11 +122,19 @@ export default {
 
         playActiveVideo() {
             const activeVideo = this.videoRefs[this.activeButtonIndex]
-            if (activeVideo && this.videosLoaded[this.activeButtonIndex]) {
+            if (activeVideo) {
                 activeVideo.currentTime = 0
-                activeVideo.play().catch(error => {
-                    console.log('Video play failed:', error)
-                })
+                // Force play immediately, even if not fully loaded
+                const playPromise = activeVideo.play()
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.log('Video play failed:', error)
+                        // Retry after a short delay if it fails
+                        setTimeout(() => {
+                            activeVideo.play().catch(e => console.log('Retry failed:', e))
+                        }, 100)
+                    })
+                }
             }
         },
 
@@ -141,7 +149,7 @@ export default {
                 }
             })
 
-            // Play the active video
+            // Play the active video immediately
             this.playActiveVideo()
         },
 

@@ -64,4 +64,7 @@ tmp/
 temp/
 
 
+# Claude
+.claude/
+CLAUDE.md
 
