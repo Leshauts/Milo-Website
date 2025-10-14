@@ -104,7 +104,7 @@ export default {
 
 .section-remote-control__image-wrapper {
     width: 100%;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1 / 1;
     border-radius: var(--border-radius-large);
     overflow: hidden;
 }

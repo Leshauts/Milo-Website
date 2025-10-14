@@ -27,7 +27,7 @@
         align="left" size="section" />
     </template>
     <template #illustration>
-      <!-- Animation future ici -->
+      <EqualizerIllustration />
     </template>
   </SectionSplit>
 
@@ -36,12 +36,12 @@
   title="Milō in your Phone and Mac" 
   :blocks="[
     {
-      image: '/src/assets/images/remote-ios.png',
+      image: '/src/assets/images/remote-ios.jpg',
       tag: 'iOS · Android',
       title: 'Full control of Milō\nin your pocket.'
     },
     {
-      image: '/src/assets/images/remote-mac.png',
+      image: '/src/assets/images/remote-mac.jpg',
       tag: 'macOS',
       title: 'Milō in your menu bar,\nlike it has always been here.'
     }
@@ -58,6 +58,7 @@ import SectionVideo from './components/SectionVideo.vue'
 import SectionAudioSources from './components/SectionAudioSources.vue'
 import SectionRemoteControl from './components/SectionRemoteControl.vue'
 import MultiroomIllustration from './components/MultiroomIllustration.vue'
+import EqualizerIllustration from './components/EqualizerIllustration.vue'
 
 export default {
   name: 'App',
@@ -69,7 +70,8 @@ export default {
     SectionVideo,
     SectionAudioSources,
     SectionRemoteControl,
-    MultiroomIllustration
+    MultiroomIllustration,
+    EqualizerIllustration
   },
   methods: {
     onGridToggle(isVisible) {
