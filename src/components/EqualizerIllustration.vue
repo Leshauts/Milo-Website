@@ -17,27 +17,29 @@
     </div>
 
     <!-- Equalizer bands -->
-    <div class="equalizer-illustration__bands" ref="bandsWrapper">
-      <div class="bands-content" ref="bandsContent" :style="scaleStyle">
-        <!-- Frequency Labels -->
-        <div class="frequency-labels">
-          <div v-for="(band, index) in bands" :key="'label-' + index" class="frequency-label">
-            <p class="body-small">{{ band.label }}</p>
+    <div class="equalizer-illustration__bands-container" ref="bandsContainer">
+      <div class="equalizer-illustration__bands" :style="scaleStyle">
+        <div class="bands-content">
+          <!-- Frequency Labels -->
+          <div class="frequency-labels">
+            <div v-for="(band, index) in bands" :key="'label-' + index" class="frequency-label">
+              <p class="body-small">{{ band.label }}</p>
+            </div>
           </div>
-        </div>
 
-        <!-- Bars Container -->
-        <div class="bars-container">
-          <RangeSlider v-for="(band, index) in bands" :key="'bar-' + index" v-model="band.value" :min="0" :max="100"
-            :step="1" orientation="vertical" :disabled="!isActive" @input="handleBandInput(index, $event)"
-            @change="handleBandChange(index, $event)" />
-        </div>
+          <!-- Bars Container -->
+          <div class="bars-container">
+            <RangeSlider v-for="(band, index) in bands" :key="'bar-' + index" v-model="band.value" :min="0" :max="100"
+              :step="1" orientation="vertical" :disabled="!isActive" @input="handleBandInput(index, $event)"
+              @change="handleBandChange(index, $event)" />
+          </div>
 
-        <!-- Values Container -->
-        <div class="values-container">
-          <p v-for="(band, index) in bands" :key="'value-' + index" class="body-small">
-            {{ band.value }}%
-          </p>
+          <!-- Values Container -->
+          <div class="values-container">
+            <p v-for="(band, index) in bands" :key="'value-' + index" class="body-small">
+              {{ band.value }}%
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -98,46 +100,34 @@ export default {
       console.log(`Band ${this.bands[index].label} final value: ${value}%`)
     },
     setupScaling() {
-      const wrapper = this.$refs.bandsWrapper
-      const content = this.$refs.bandsContent
+      const container = this.$refs.bandsContainer
 
-      if (!wrapper || !content) return
+      if (!container) return
 
-      // Dimensions de référence du contenu (taille "idéale" à desktop)
-      const contentWidth = 620 // Largeur de référence
-      const contentHeight = 400 // Hauteur de référence
+      // Dimensions de référence du bands (taille "idéale" à desktop)
+      const referenceWidth = 620 // Largeur de référence
+      const referenceHeight = 400 // Hauteur de référence
 
       const calculateScale = () => {
-        const wrapperRect = wrapper.getBoundingClientRect()
-
-        // Récupérer le padding du wrapper
-        const computedStyle = window.getComputedStyle(wrapper)
-        const paddingLeft = parseFloat(computedStyle.paddingLeft)
-        const paddingRight = parseFloat(computedStyle.paddingRight)
-        const paddingTop = parseFloat(computedStyle.paddingTop)
-        const paddingBottom = parseFloat(computedStyle.paddingBottom)
-
-        // Calculer l'espace disponible en soustrayant le padding
-        const availableWidth = wrapperRect.width - paddingLeft - paddingRight
-        const availableHeight = wrapperRect.height - paddingTop - paddingBottom
+        const containerRect = container.getBoundingClientRect()
 
         // Calculer le scale basé sur le ratio
-        const scaleX = availableWidth / contentWidth
-        const scaleY = availableHeight / contentHeight
+        const scaleX = containerRect.width / referenceWidth
+        const scaleY = containerRect.height / referenceHeight
 
-        // Utiliser le plus grand ratio pour remplir tout l'espace (cover behavior)
-        this.scaleValue = Math.max(scaleX, scaleY)
+        // Utiliser le plus petit ratio pour que tout rentre (contain behavior)
+        this.scaleValue = Math.min(scaleX, scaleY)
       }
 
       // Initial calculation
       calculateScale()
 
-      // Observer les changements de taille du wrapper
+      // Observer les changements de taille du container
       this.resizeObserver = new ResizeObserver(() => {
         calculateScale()
       })
 
-      this.resizeObserver.observe(wrapper)
+      this.resizeObserver.observe(container)
 
       // Aussi écouter le resize de la fenêtre
       window.addEventListener('resize', calculateScale)
@@ -234,33 +224,43 @@ export default {
 }
 
 /* === EQUALIZER BANDS === */
-.equalizer-illustration__bands {
+/* Container pour le positionnement */
+.equalizer-illustration__bands-container {
   position: absolute;
   top: calc(var(--space-09) + 64px + var(--space-04));
   left: 50%;
   transform: translateX(-50%);
   width: calc(100% - (var(--space-08) * 2));
-  background-color: var(--color-background-neutral-50);
-  border-radius: var(--border-radius-large);
-  padding: var(--space-03);
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Aspect ratio: hauteur basée sur la largeur */
   aspect-ratio: 620 / 400;
 }
 
-.bands-content {
+/* Bands scalé avec border-radius */
+.equalizer-illustration__bands {
   position: absolute;
   width: 620px;
-  height: 388px;
-  padding: 16px;
-  background: white;
-  border-radius: var(--border-radius-medium);
+  height: 400px;
+  background-color: var(--color-background-neutral-50);
+  border-radius: var(--border-radius-large);
+  padding: var(--space-03);
   top: 50%;
   left: 50%;
   transform-origin: center center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Contenu qui prend 100% */
+.bands-content {
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+  background: white;
+  border-radius: var(--border-radius-medium);
   display: flex;
   flex-direction: column;
   gap: var(--space-03);
@@ -322,9 +322,8 @@ export default {
 /* === RESPONSIVE TABLET === */
 
 @media (max-width: 1024px) {
-  .equalizer-illustration__bands {
+  .equalizer-illustration__bands-container {
     width: calc(100% - (var(--space-05) * 2));
-    /* padding: var(--space-03); */
   }
 }
 
