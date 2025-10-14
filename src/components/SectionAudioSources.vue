@@ -340,8 +340,8 @@ export default {
     transform: translate(-50%, -50%);
     z-index: 0;
     pointer-events: none;
-    width: 64vw;
-    height: 64vw;
+    width: 80vw;
+    height: 80vw;
 }
 
 @keyframes rotate {
@@ -356,11 +356,11 @@ export default {
 
 .gradient {
     position: absolute;
-    width: 64vw;
-    height: 64vw;
+    width: 80vw;
+    height: 80vw;
     top: 0;
     left: 0;
-    filter: blur(calc(64vw / 5));
+    filter: blur(100vw);
     animation: rotate 15s linear infinite;
     border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
     opacity: 0;

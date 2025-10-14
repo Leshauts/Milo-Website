@@ -1,22 +1,14 @@
 <!-- src / components / FeatureItem.vue -->
 <template>
     <div class="feature-item">
-        <!-- Ligne : icon + name -->
-        <div class="feature-item__header">
-            <div class="feature-item__icon">
-                <!-- Icon SVG ou placeholder -->
-                <img v-if="icon" :src="icon" :alt="name + ' icon'" class="svg-icon" />
-                <div v-else class="icon-placeholder"></div>
-            </div>
-            <div class="feature-item__name body-medium">
-                {{ name }}
-            </div>
+        <div class="feature-item__icon">
+            <!-- Icon SVG ou placeholder -->
+            <img v-if="icon" :src="icon" :alt="name + ' icon'" class="svg-icon" />
+            <div v-else class="icon-placeholder"></div>
         </div>
-
-        <!-- Paragraphe descriptif -->
-        <p class="feature-item__paragraph body-small">
-            {{ paragraph }}
-        </p>
+        <div class="feature-item__name body-medium">
+            {{ name }}
+        </div>
     </div>
 </template>
 
@@ -28,10 +20,6 @@ export default {
             type: String,
             required: true
         },
-        paragraph: {
-            type: String,
-            default: "Milō in Spotify to enjoy your favorite music & playlists."
-        },
         icon: {
             type: String,
             default: null
@@ -42,16 +30,31 @@ export default {
 
 <style scoped>
 .feature-item {
-    background-color: var(--color-background-neutral-50);
-    border-radius: var(--border-radius-small);
-    padding: var(--space-04);
-}
-
-.feature-item__header {
+    position: relative;
+    background-color: var(--color-background-neutral-32);
+    border-radius: var(--border-radius-medium);
+    padding: var(--space-03) var(--space-03);
     display: flex;
     align-items: center;
     gap: var(--space-02);
-    margin-bottom: var(--space-02);
+    z-index: 0;
+    overflow: hidden;
+}
+
+.feature-item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1.5px;
+    background: var(--stroke-glass);
+    border-radius: var(--border-radius-medium);
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: -1;
+    pointer-events: none;
 }
 
 .feature-item__icon {
@@ -76,11 +79,6 @@ export default {
 .feature-item__name {
     color: var(--color-text);
     font-weight: 500;
-}
-
-.feature-item__paragraph {
-    color: var(--color-text-secondary);
-    line-height: var(--line-height-body-small);
 }
 
 /* === RESPONSIVE MOBILE === */

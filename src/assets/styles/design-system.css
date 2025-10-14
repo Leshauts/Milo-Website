@@ -63,6 +63,11 @@
     --border-radius-large: 24px;
     --border-radius-xlarge: 32px;
     --border-radius-xxlarge: 48px;
+    --border-radius-full: 9999px;
+
+
+    /* === GRADIENTS === */
+    --stroke-glass: linear-gradient(190deg, rgba(255, 255, 255, .48) 0.43%, rgba(255, 255, 255, .06) 21.15%, rgba(255, 255, 255, .48) 47.85%, rgba(255, 255, 255, .06) 78.57%);
 
 }
 

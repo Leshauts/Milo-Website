@@ -16,7 +16,7 @@
         align="left" size="section" />
     </template>
     <template #illustration>
-      <!-- Animation future ici -->
+      <MultiroomIllustration />
     </template>
   </SectionSplit>
 
@@ -57,6 +57,7 @@ import SectionCover from './components/SectionCover.vue'
 import SectionVideo from './components/SectionVideo.vue'
 import SectionAudioSources from './components/SectionAudioSources.vue'
 import SectionRemoteControl from './components/SectionRemoteControl.vue'
+import MultiroomIllustration from './components/MultiroomIllustration.vue'
 
 export default {
   name: 'App',
@@ -67,7 +68,8 @@ export default {
     SectionCover,
     SectionVideo,
     SectionAudioSources,
-    SectionRemoteControl
+    SectionRemoteControl,
+    MultiroomIllustration
   },
   methods: {
     onGridToggle(isVisible) {
