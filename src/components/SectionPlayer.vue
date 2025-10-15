@@ -50,13 +50,13 @@
               <div class="controls-wrapper">
                 <div class="controls">
                   <div class="control-button previous">
-                    <Icon name="previous" :size="48" class="icon-secondary" />
+                    <Icon name="previous" :size="40" class="icon-secondary" />
                   </div>
                   <div class="control-button play-pause">
-                    <Icon name="play" :size="48" class="icon-primary" />
+                    <Icon name="play" :size="40" class="icon-primary" />
                   </div>
                   <div class="control-button next">
-                    <Icon name="next" :size="48" class="icon-secondary" />
+                    <Icon name="next" :size="40" class="icon-secondary" />
                   </div>
                 </div>
               </div>
@@ -289,11 +289,13 @@ onMounted(() => {
 }
 
 .track-title {
+  font-size: 2vw;
   color: var(--color-text);
 }
 
 .track-artist {
   color: var(--color-text-light);
+  font-size: 1.8vw;
 }
 
 .controls-section {
