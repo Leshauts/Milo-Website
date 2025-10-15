@@ -11,13 +11,7 @@
         </div>
 
         <!-- SectionTitle utilisé avec size="main" -->
-        <SectionTitle 
-            :tag="tag"
-            :title="title"
-            :paragraph="paragraph"
-            size="main"
-            align="center"
-        />
+        <SectionTitle :tag="tag" :title="title" :paragraph="paragraph" size="main" align="center" />
 
         <!-- Grid des 8 features -->
         <div class="features-grid">
@@ -92,6 +86,7 @@ export default {
     border-radius: var(--border-radius-xxlarge);
     padding: var(--space-05) var(--space-06) var(--space-09) var(--space-06);
     background: linear-gradient(to bottom, #F1F1F1, #DADED9);
+    overflow: hidden;
 }
 
 /* Logo */
@@ -112,7 +107,7 @@ export default {
     grid-column: 2 / -2;
     display: flex;
     justify-content: center;
-    margin-bottom: var(--space-06);
+    margin: var(--space-08);
 }
 
 .cover-image {
@@ -123,7 +118,8 @@ export default {
 
 /* SectionTitle avec marge spécifique à SectionCover */
 .section-cover :deep(.section-title) {
-    margin-bottom: var(--space-07); /* 48px */
+    margin-bottom: var(--space-07);
+    /* 48px */
 }
 
 /* Grid des features */
@@ -153,6 +149,12 @@ export default {
 @media (max-width: 600px) {
     .section-cover__image {
         grid-column: 1 / 5;
+        margin: var(--space-09) 0 var(--space-09) 0;
+
+    }
+
+    .cover-image {
+        max-width: 150%;
     }
 }
 </style>
