@@ -3,42 +3,45 @@
     <!-- Background image -->
     <img src="/src/assets/images/equalizer/background.png" alt="" class="equalizer-illustration__background" />
 
-    <!-- Title bar -->
-    <div class="equalizer-illustration__title-bar">
-      <div class="title-bar__left">
-        <img src="/src/assets/images/equalizer/icon.png" alt="" class="title-bar__icon" />
-        <h5 class="h5 title-bar__title">Equalizer</h5>
-      </div>
-      <div class="title-bar__toggle">
-        <div class="toggle" :class="{ 'toggle--active': isActive }">
-          <div class="toggle__knob"></div>
+    <!-- Content wrapper (title bar + bands) -->
+    <div class="equalizer-illustration__content">
+      <!-- Title bar -->
+      <div class="equalizer-illustration__title-bar">
+        <div class="title-bar__left">
+          <img src="/src/assets/images/equalizer/icon.png" alt="" class="title-bar__icon" />
+          <h5 class="h5 title-bar__title">Equalizer</h5>
+        </div>
+        <div class="title-bar__toggle">
+          <div class="toggle" :class="{ 'toggle--active': isActive }">
+            <div class="toggle__knob"></div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Equalizer bands -->
-    <div class="equalizer-illustration__bands-container" ref="bandsContainer">
-      <div class="equalizer-illustration__bands" :style="scaleStyle">
-        <div class="bands-content">
-          <!-- Frequency Labels -->
-          <div class="frequency-labels">
-            <div v-for="(band, index) in bands" :key="'label-' + index" class="frequency-label">
-              <p class="body-small">{{ band.label }}</p>
+      <!-- Equalizer bands -->
+      <div class="equalizer-illustration__bands-container" ref="bandsContainer">
+        <div class="equalizer-illustration__bands" :style="scaleStyle">
+          <div class="bands-content">
+            <!-- Frequency Labels -->
+            <div class="frequency-labels">
+              <div v-for="(band, index) in bands" :key="'label-' + index" class="frequency-label">
+                <p class="body-mono">{{ band.label }}</p>
+              </div>
             </div>
-          </div>
 
-          <!-- Bars Container -->
-          <div class="bars-container">
-            <RangeSlider v-for="(band, index) in bands" :key="'bar-' + index" v-model="band.value" :min="0" :max="100"
-              :step="1" orientation="vertical" :disabled="!isActive" @input="handleBandInput(index, $event)"
-              @change="handleBandChange(index, $event)" />
-          </div>
+            <!-- Bars Container -->
+            <div class="bars-container">
+              <RangeSlider v-for="(band, index) in bands" :key="'bar-' + index" v-model="band.value" :min="0" :max="100"
+                :step="1" orientation="vertical" :disabled="!isActive" @input="handleBandInput(index, $event)"
+                @change="handleBandChange(index, $event)" />
+            </div>
 
-          <!-- Values Container -->
-          <div class="values-container">
-            <p v-for="(band, index) in bands" :key="'value-' + index" class="body-small">
-              {{ band.value }}%
-            </p>
+            <!-- Values Container -->
+            <div class="values-container">
+              <p v-for="(band, index) in bands" :key="'value-' + index" class="body-mono">
+                {{ band.value }}%
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -70,13 +73,14 @@ export default {
         { label: '16k', value: 94 }
       ],
       scaleValue: 1,
-      resizeObserver: null
+      resizeObserver: null,
+      resizeHandler: null
     }
   },
   computed: {
     scaleStyle() {
       return {
-        transform: `translate(-50%, -50%) scale(${this.scaleValue})`
+        transform: `scale(${this.scaleValue})`
       }
     }
   },
@@ -88,6 +92,9 @@ export default {
   beforeUnmount() {
     if (this.resizeObserver) {
       this.resizeObserver.disconnect()
+    }
+    if (this.resizeHandler) {
+      window.removeEventListener('resize', this.resizeHandler)
     }
   },
   methods: {
@@ -129,13 +136,9 @@ export default {
 
       this.resizeObserver.observe(container)
 
-      // Aussi écouter le resize de la fenêtre
-      window.addEventListener('resize', calculateScale)
-
-      // Cleanup dans beforeUnmount
-      this.$once('hook:beforeUnmount', () => {
-        window.removeEventListener('resize', calculateScale)
-      })
+      // Stocker le handler pour pouvoir le supprimer dans beforeUnmount
+      this.resizeHandler = calculateScale
+      window.addEventListener('resize', this.resizeHandler)
     }
   }
 }
@@ -147,7 +150,7 @@ export default {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border-radius: var(--border-radius-large);
+  border-radius: var(--border-radius-xxlarge);
 }
 
 /* === BACKGROUND === */
@@ -160,12 +163,20 @@ export default {
   object-fit: cover;
 }
 
+/* === CONTENT WRAPPER === */
+.equalizer-illustration__content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - (var(--space-08) * 2));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-04);
+}
+
 /* === TITLE BAR === */
 .equalizer-illustration__title-bar {
-  position: absolute;
-  top: var(--space-09);
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -173,7 +184,6 @@ export default {
   background-color: var(--color-background-neutral);
   border-radius: var(--border-radius-large);
   gap: var(--space-05);
-  width: calc(100% - (var(--space-08) * 2));
 }
 
 .title-bar__left {
@@ -226,11 +236,7 @@ export default {
 /* === EQUALIZER BANDS === */
 /* Container pour le positionnement */
 .equalizer-illustration__bands-container {
-  position: absolute;
-  top: calc(var(--space-09) + 64px + var(--space-04));
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - (var(--space-08) * 2));
+  width: 100%;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -240,14 +246,12 @@ export default {
 
 /* Bands scalé avec border-radius */
 .equalizer-illustration__bands {
-  position: absolute;
   width: 620px;
   height: 400px;
+  aspect-ratio: 620 / 400;
   background-color: var(--color-background-neutral-50);
-  border-radius: var(--border-radius-large);
+  border-radius: var(--border-radius-xlarge);
   padding: var(--space-03);
-  top: 50%;
-  left: 50%;
   transform-origin: center center;
   display: flex;
   align-items: center;
@@ -260,7 +264,7 @@ export default {
   height: 100%;
   padding: 16px;
   background: white;
-  border-radius: var(--border-radius-medium);
+  border-radius: var(--border-radius-small);
   display: flex;
   flex-direction: column;
   gap: var(--space-03);
@@ -322,8 +326,8 @@ export default {
 /* === RESPONSIVE TABLET === */
 
 @media (max-width: 1024px) {
-  .equalizer-illustration__bands-container {
-    width: calc(100% - (var(--space-05) * 2));
+  .equalizer-illustration__content {
+    width: calc(100% - (var(--space-07) * 2));
   }
 }
 

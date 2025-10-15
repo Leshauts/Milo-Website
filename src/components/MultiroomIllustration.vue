@@ -80,7 +80,7 @@ export default {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border-radius: var(--border-radius-large);
+  border-radius: var(--border-radius-xxlarge);
 }
 
 /* === BACKGROUND === */
@@ -98,7 +98,7 @@ export default {
   position: absolute;
   left: var(--space-07);
   right: var(--space-07);
-  bottom: var(--space-08);
+  bottom: var(--space-09);
   width: calc(100% - var(--space-07) * 2);
   height: auto;
   mix-blend-mode: color-dodge;
@@ -107,7 +107,7 @@ export default {
 /* === TITLE BAR === */
 .multiroom-illustration__title-bar {
   position: absolute;
-  top: var(--space-09);
+  top: 16%;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -230,20 +230,20 @@ export default {
 /* Room group positions */
 .room-group--kitchen {
   bottom: 47%;
-  left: 14%;
+  left: 13.5%;
   flex-direction: column;
   gap: var(--space-01);
 }
 
 .room-group--office {
-  bottom: 44%;
+  bottom: 47%;
   right: 14%;
   flex-direction: column;
   gap: var(--space-01);
 }
 
 .room-group--living {
-  bottom: 28%;
+  bottom: 32%;
   left: 50%;
   transform: translateX(-50%);
   flex-direction: column;
@@ -277,11 +277,12 @@ export default {
   .multiroom-illustration__house {
     left: var(--space-06);
     right: var(--space-06);
-    bottom: var(--space-08);
     width: calc(100% - var(--space-06) * 2);
   }
 
-
+  .multiroom-illustration__title-bar {
+    width: calc(100% - (var(--space-07) * 2));
+  }
 
   .speaker-icon {
     width: 40px;

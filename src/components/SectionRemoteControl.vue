@@ -77,7 +77,7 @@ export default {
     gap: var(--grid-gutter);
     row-gap: var(--space-08);
     background-color: var(--color-background-neutral);
-    border-radius: var(--border-radius-large);
+    border-radius: var(--border-radius-xxlarge);
     padding: var(--space-09);
     overflow: hidden;
     margin-bottom: var(--space-09);
@@ -105,7 +105,7 @@ export default {
 .section-remote-control__image-wrapper {
     width: 100%;
     aspect-ratio: 1 / 1;
-    border-radius: var(--border-radius-large);
+    border-radius: var(--border-radius-xxlarge);
     overflow: hidden;
 }
 
@@ -135,8 +135,9 @@ export default {
     .section-remote-control__blocks {
         grid-column: 2 / -2;
     }
-        .section-remote-control__block-title {
-        white-space:normal;
+
+    .section-remote-control__block-title {
+        white-space: normal;
         text-wrap: balance;
     }
 
@@ -145,7 +146,7 @@ export default {
 /* === RESPONSIVE MOBILE === */
 @media (max-width: 600px) {
     .section-remote-control {
-        padding: var(--space-09) var(--space-08);
+        padding: var(--space-09) var(--space-06);
     }
 
     .section-remote-control__blocks {
@@ -158,8 +159,9 @@ export default {
     .section-remote-control__block:last-child {
         grid-column: 1 / 5;
     }
-        .section-remote-control__block-title {
-        white-space:pre-line;
+
+    .section-remote-control__block-title {
+        white-space: pre-line;
     }
 }
 </style>

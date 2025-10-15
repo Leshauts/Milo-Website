@@ -9,6 +9,7 @@
     --font-size-body-large: 24px;
     --font-size-body-medium: 18px;
     --font-size-body-small: 14px;
+    --font-size-body-mono: 14px;
 
     --line-height-h1: 108%;
     --line-height-h2: 108%;
@@ -18,6 +19,7 @@
     --line-height-body-large: 130%;
     --line-height-body-medium: 150%;
     --line-height-body-small: 130%;
+    --line-height-body-mono: 130%;
 
     /* === ESPACEMENT === */
     --space-01: 4px;
@@ -60,9 +62,10 @@
     /* === BORDER RADIUS === */
     --border-radius-small: 12px;
     --border-radius-medium: 16px;
-    --border-radius-large: 24px;
-    --border-radius-xlarge: 32px;
-    --border-radius-xxlarge: 48px;
+    --border-radius-large: 20px;
+    --border-radius-xlarge: 24px;
+    --border-radius-xxlarge: 32px;
+    --border-radius-xxxlarge: 48px;
     --border-radius-full: 9999px;
 
 
@@ -94,6 +97,8 @@
         --font-size-body-large: 18px;
         --font-size-body-medium: 16px;
         --font-size-body-small: 12px;
+        --font-size-body-mono: 12px;
+
 
         --space-05: 16px;
         --space-06: 24px;
@@ -112,8 +117,10 @@
         --border-radius-small: 8px;
         --border-radius-medium: 12px;
         --border-radius-large: 16px;
-        --border-radius-xlarge: 24px;
+        --border-radius-xlarge: 20px;
+        --border-radius-xxlarge: 24px;
         --border-radius-xxlarge: 32px;
+
     }
 }
 
@@ -217,7 +224,7 @@ body {
 
 .body-mono {
     font-family: 'Space Mono', monospace;
-    font-size: var(--font-size-body-medium);
-    line-height: var(--line-height-body-medium);
+    font-size: var(--font-size-body-mono);
+    line-height: var(--line-height-body-mono);
     font-weight: 400;
 }

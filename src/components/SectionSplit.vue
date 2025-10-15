@@ -56,7 +56,7 @@ export default {
   display: grid;
   grid-template-columns: subgrid;
   grid-column: 1 / -1;
-  border-radius: var(--border-radius-large);
+  border-radius: var(--border-radius-xxlarge);
 
   /* Configuration du contenu split */
   grid-template-columns: 1fr 1fr;

@@ -89,7 +89,7 @@ export default {
     display: grid;
     grid-template-columns: subgrid;
     grid-column: 1 / -1;
-    border-radius: var(--border-radius-large);
+    border-radius: var(--border-radius-xxlarge);
     padding: var(--space-05) var(--space-06) var(--space-09) var(--space-06);
     background: linear-gradient(to bottom, #F1F1F1, #DADED9);
 }

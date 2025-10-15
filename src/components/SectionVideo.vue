@@ -138,7 +138,7 @@ export default {
 .section-video__container {
     grid-column: 1 / -1;
     position: relative;
-    border-radius: var(--border-radius-large);
+    border-radius: var(--border-radius-xxlarge);
     overflow: hidden;
     background-color: var(--color-background-contrast);
     
