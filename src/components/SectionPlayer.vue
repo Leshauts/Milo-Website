@@ -388,7 +388,7 @@ onMounted(() => {
 /* Playback Controls */
 .controls {
   background: var(--color-background);
-  border-radius: var(--border-radius-large);
+    border-radius: 1.2vw;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -402,7 +402,6 @@ onMounted(() => {
   width: 2.5vw;
   height: 2.5vw;
   border-radius: 50%;
-  transition: all 0.3s ease;
 }
 
 .control-button.play-pause {
@@ -428,7 +427,7 @@ onMounted(() => {
   transform: translateX(-50%) translateY(80px) scale(0.85);
   z-index: 10;
 
-  border-radius: 3vw;
+  border-radius: 2.7vw;
   padding: 1.3vw;
   background: rgba(120, 120, 120, 0.16);
   backdrop-filter: blur(24px);
@@ -437,7 +436,7 @@ onMounted(() => {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 1vw;
+  gap: 0.9vw;
 
   cursor: pointer;
   opacity: 0;
@@ -455,7 +454,7 @@ onMounted(() => {
   inset: 0;
   padding: 1.3vw;
   background: var(--stroke-glass);
-  border-radius: 3vw;
+  border-radius: 2.7vw;
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
@@ -555,13 +554,13 @@ onMounted(() => {
 }
 
 /* === RESPONSIVE - TABLET === */
-@media (max-width: 1024px) {
+@media (max-width: 1180px) {
   .section-player__content {
     padding: 0 var(--space-06) 0 var(--space-06);
   }
 
   .section-player__app {
-    padding: var(--space-09) 0 var(--space-09) var(--space-05);
+    padding: var(--space-09) var(--space-05) var(--space-09) var(--space-05);
   }
 
   .inline-icon {
@@ -621,7 +620,7 @@ onMounted(() => {
   }
 
   .controls {
-    border-radius: var(--border-radius-small);
+        border-radius: 2.3vw;
     padding: 2vw var(--space-03);
 
   }
