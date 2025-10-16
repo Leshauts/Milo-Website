@@ -10,60 +10,6 @@
     <!-- Fake Milo Player -->
     <div class="section-player__app">
       <div class="player-container">
-        <!-- Player Interface -->
-        <div class="player-interface">
-          <!-- Album Art Section -->
-          <div class="album-art-section">
-            <div class="album-art-container">
-              <!-- Blur background -->
-              <div class="album-art-blur" :style="{ backgroundImage: `url(${albumCover})` }"></div>
-
-              <!-- Main album art -->
-              <div class="album-art">
-                <img :src="albumCover" alt="Album Art" />
-              </div>
-            </div>
-          </div>
-
-          <!-- Content Section -->
-          <div class="content-section">
-            <!-- Track Info -->
-            <div class="track-info">
-              <h1 class="track-title h4">{{ trackTitle }}</h1>
-              <p class="track-artist h5">{{ trackArtist }}</p>
-            </div>
-
-            <!-- Controls Section -->
-            <div class="controls-section">
-              <!-- Progress Bar -->
-              <div class="progress-wrapper">
-                <div class="progress-bar">
-                  <span class="body-mono time">{{ currentTime }}</span>
-                  <div class="progress-container">
-                    <div class="progress" :style="{ width: progressWidth }"></div>
-                  </div>
-                  <span class="body-mono time">{{ duration }}</span>
-                </div>
-              </div>
-
-              <!-- Playback Controls -->
-              <div class="controls-wrapper">
-                <div class="controls">
-                  <div class="control-button previous">
-                    <Icon name="previous" :size="40" class="icon-secondary" />
-                  </div>
-                  <div class="control-button play-pause">
-                    <Icon name="play" :size="40" class="icon-primary" />
-                  </div>
-                  <div class="control-button next">
-                    <Icon name="next" :size="40" class="icon-secondary" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <!-- Bottom Navigation (3 icons) - Positioned absolutely over player -->
         <div class="dock" :class="{ 'dock-visible': isDockVisible }" @click="handleDockClick">
           <button v-for="(source, index) in audioSources" :key="source.id" class="dock-item"
@@ -73,28 +19,96 @@
           </button>
           <div class="active-indicator" :style="indicatorStyle"></div>
         </div>
+        <div class="player-inner">
+          <!-- Player Interface -->
+          <div class="player-interface">
+            <!-- Album Art Section -->
+            <div class="album-art-section">
+              <div class="album-art-container">
+                <!-- Blur background -->
+                <div class="album-art-blur" :style="{ backgroundImage: `url(${albumCover})` }"></div>
+
+                <!-- Main album art -->
+                <div class="album-art">
+                  <img :src="albumCover" alt="Album Art" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Content Section -->
+            <div class="content-section">
+              <!-- Track Info -->
+              <div class="track-info">
+                <h1 class="track-title h4">{{ trackTitle }}</h1>
+                <p class="track-artist h5">{{ trackArtist }}</p>
+              </div>
+
+              <!-- Controls Section -->
+              <div class="controls-section">
+                <!-- Progress Bar -->
+                <div class="progress-wrapper">
+                  <div class="progress-bar">
+                    <span class="body-mono time">{{ currentTime }}</span>
+                    <div class="progress-container">
+                      <div class="progress" :style="{ width: progressWidth }"></div>
+                    </div>
+                    <span class="body-mono time">{{ duration }}</span>
+                  </div>
+                </div>
+
+                <!-- Playback Controls -->
+                <div class="controls-wrapper">
+                  <div class="controls">
+                    <div class="control-button previous">
+                      <Icon name="previous" :size="40" class="icon-secondary" />
+                    </div>
+                    <div class="control-button play-pause">
+                      <Icon name="play" :size="40" class="icon-primary" />
+                    </div>
+                    <div class="control-button next">
+                      <Icon name="next" :size="40" class="icon-secondary" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
       </div>
     </div>
 
     <!-- Text Content -->
     <div class="section-player__content">
-      <SectionTitle :tag="tag" :title="title" :paragraph="paragraph" align="left" size="section" :variant="variant" />
+      <div class="section-title">
+        <div class="section-title__tag body-small">
+          {{ tag }}
+        </div>
+        <h2 class="section-title__title h2">
+          Play audio from <span class="no-wrap"><img :src="spotifyIcon" alt="Spotify"
+              class="inline-icon" />Spotify</span>, <span class="no-wrap"><img :src="bluetoothIcon" alt="Bluetooth"
+              class="inline-icon" />Bluetooth</span> or&nbsp;your <span class="no-wrap"><img :src="macosIcon" alt="Mac"
+              class="inline-icon" />Mac</span>.
+        </h2>
+        <p class="section-title__paragraph body-medium">
+          {{ paragraph }}
+        </p>
+      </div>
     </div>
   </section>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import SectionTitle from './SectionTitle.vue';
 import AppIcon from './AppIcon.vue';
 import Icon from './Icon.vue';
+import spotifyIcon from '../assets/icons/spotify-mono.svg';
+import bluetoothIcon from '../assets/icons/bluetooth-mono.svg';
+import macosIcon from '../assets/icons/macos-mono.svg';
 
 const props = defineProps({
   tag: {
-    type: String,
-    required: true
-  },
-  title: {
     type: String,
     required: true
   },
@@ -130,8 +144,8 @@ let animationTimeout = null;
 
 // Indicator style with delay
 const indicatorStyle = computed(() => {
-  const itemWidth = 56; // icon size
-  const gap = 8; // var(--space-02)
+  const itemWidth = 64; // icon size
+  const gap = 12; // var(--space-02)
   const offsetX = activeSourceIndex.value * (itemWidth + gap) + (itemWidth / 2) - 2;
 
   return {
@@ -174,6 +188,7 @@ onMounted(() => {
 .section-player {
   position: relative;
   display: grid;
+  min-height: 48vw;
   grid-template-columns: subgrid;
   grid-column: 1 / -1;
   border-radius: var(--border-radius-xxlarge);
@@ -182,12 +197,43 @@ onMounted(() => {
   overflow: hidden;
 }
 
+/* === SECTION TITLE === */
+.section-title {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-03);
+}
+
+.section-title__tag {
+  color: var(--color-brand);
+}
+
+.section-title__title {
+  color: var(--color-text);
+}
+
+.section-title__paragraph {
+  color: var(--color-text-secondary);
+  margin-top: var(--space-02);
+}
+
+.inline-icon {
+  width: 32px;
+  height: 32px;
+  vertical-align: middle;
+  margin-right: var(--space-02);
+}
+
+.no-wrap {
+  white-space: nowrap;
+}
+
 /* === PLAYER LAYOUT === */
 .section-player__app {
   grid-column: 1 / 5;
   display: flex;
   flex-direction: column;
-  padding: var(--space-09) 0 var(--space-09) var(--space-09);
+  padding: var(--space-10) 0 var(--space-10) var(--space-09);
   position: relative;
   z-index: 2;
 }
@@ -197,20 +243,26 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 var(--space-08) 0 calc(var(--space-08) + 16px);
+  padding: var(--space-08) var(--space-08) var(--space-08) calc(var(--space-08) + 16px);
   position: relative;
   z-index: 2;
 }
 
 .player-container {
   position: relative;
+  aspect-ratio: 5 / 3;
+  width: 100%;
+}
+
+.player-inner {
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
   gap: var(--space-04);
   background: var(--color-background-neutral);
   border-radius: var(--border-radius-xxlarge);
   overflow: hidden;
-  aspect-ratio: 5 / 3;
 }
 
 /* === PLAYER INTERFACE === */
@@ -340,22 +392,22 @@ onMounted(() => {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  padding: var(--space-01) var(--space-03);
+  padding: 1vw var(--space-03);
 }
 
 .control-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 64px;
-  height: 64px;
+  width: 2.5vw;
+  height: 2.5vw;
   border-radius: 50%;
   transition: all 0.3s ease;
 }
 
 .control-button.play-pause {
-  width: 72px;
-  height: 72px;
+  width: 2.5vwvw;
+  height: 2.5vw;
 }
 
 .icon-primary {
@@ -371,13 +423,13 @@ onMounted(() => {
 /* === BOTTOM NAVIGATION (DOCK) === */
 .dock {
   position: absolute;
-  bottom: var(--space-04);
+  bottom: -3vw;
   left: 50%;
   transform: translateX(-50%) translateY(80px) scale(0.85);
   z-index: 10;
 
-  border-radius: var(--border-radius-xxlarge);
-  padding: var(--space-04);
+  border-radius: 3vw;
+  padding: 1.3vw;
   background: rgba(120, 120, 120, 0.16);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
@@ -385,7 +437,7 @@ onMounted(() => {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: var(--space-03);
+  gap: 1vw;
 
   cursor: pointer;
   opacity: 0;
@@ -401,9 +453,9 @@ onMounted(() => {
   content: '';
   position: absolute;
   inset: 0;
-  padding: 1.5px;
+  padding: 1.3vw;
   background: var(--stroke-glass);
-  border-radius: var(--border-radius-xxlarge);
+  border-radius: 3vw;
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
@@ -432,8 +484,8 @@ onMounted(() => {
 }
 
 .dock-item-icon {
-  width: 56px;
-  height: 56px;
+  width: 5vw;
+  height: 5vw;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -467,6 +519,7 @@ onMounted(() => {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -506,6 +559,25 @@ onMounted(() => {
   .section-player__content {
     padding: 0 var(--space-06) 0 var(--space-06);
   }
+
+  .section-player__app {
+    padding: var(--space-09) 0 var(--space-09) var(--space-05);
+  }
+
+  .inline-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+
+
+  .track-artist {
+    font-size: 20px;
+  }
+
+  .body-mono.time {
+    font-size: 12px;
+  }
 }
 
 /* === RESPONSIVE - MOBILE === */
@@ -513,42 +585,86 @@ onMounted(() => {
   .section-player__app {
     grid-column: 1 / -1;
     padding: var(--space-06);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    order: 2;
   }
 
   .section-player__content {
     grid-column: 1 / -1;
-    padding: var(--space-09) var(--space-06) var(--space-09) var(--space-06);
+    padding: var(--space-09) var(--space-06) var(--space-05) var(--space-06);
+    order: 1;
   }
 
-  .player-interface {
-    padding: var(--space-05) var(--space-05) 0 var(--space-05);
-    flex-direction: column;
-    gap: 0;
+  .player-container {
+    margin-bottom: var(--space-09);
+    transform-origin: center center;
+    width: 100%;
   }
 
-  .album-art-section {
-    max-width: 100%;
+  .inline-icon {
+    width: 20px;
+    height: 20px;
   }
 
-  .album-art-blur {
-    transform: scale(1) translateZ(0);
+  .track-title {
+    font-size: 4vw;
   }
 
-  .track-info {
-    padding: var(--space-06) 0 var(--space-03) 0;
+  .track-artist {
+    font-size: 3.5vw;
+  }
+
+  .body-mono.time {
+    font-size: 9px;
+  }
+
+  .controls {
+    border-radius: var(--border-radius-small);
+    padding: 2vw var(--space-03);
+
+  }
+
+  .control-button {
+    width: 4vw;
+    height: 4vw;
+  }
+
+  .control-button.play-pause {
+    width: 4vw;
+    height: 4vw;
+  }
+
+  .progress-bar {
+    gap: var(--space-01);
+  }
+
+  .progress-container[data-v-0c961f40] {
+    height: 4px;
   }
 
   .dock {
-    bottom: var(--space-05);
+    gap: 1.25vw;
+    padding: 2vw;
+    border-radius: 4vw;
+  }
+
+  .dock::before {
+    border-radius: 4vw;
+    padding: 2vw;
   }
 
   .dock-item-icon {
-    width: 64px;
-    height: 64px;
+    width: 8vw;
+    height: 8vw;
   }
 
   .animated-gradients {
+    top: auto;
+    bottom: -16%;
     left: 50%;
+    transform: translate(-50%, 0);
     width: 120vw;
     height: 120vw;
   }

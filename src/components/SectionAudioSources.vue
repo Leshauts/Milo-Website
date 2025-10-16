@@ -191,7 +191,7 @@ export default {
     grid-template-columns: subgrid;
     grid-column: 1 / -1;
     background-color: var(--color-background-neutral);
-    border-radius: var(--border-radius-xxlarge);
+    border-radius: var(--border-radius-xlarge);
     padding: var(--space-09);
     overflow: hidden;
 }

@@ -7,7 +7,10 @@
   <SectionVideo desktop-video-src="/src/assets/videos/demo-desktop.mp4"
     mobile-video-src="/src/assets/videos/demo-mobile.mp4" :autoplay="false" />
 
-  <SectionAudioSources tag="Audio Sources" title-prefix="Play audio from" />
+
+  <SectionPlayer tag="Audio Sources"
+    paragraph="Stream your favorite music from Spotify, Bluetooth, or macOS. Control playback, adjust volume, and switch sources seamlessly from your phone or computer." />
+  <!-- <SectionAudioSources tag="Audio Sources" title-prefix="Play audio from" /> -->
 
   <SectionSplit variant="default">
     <template #content>
@@ -31,16 +34,9 @@
     </template>
   </SectionSplit>
 
-<SectionPlayer
-  tag="Your music, everywhere"
-  title="Control from your phone"
-  paragraph="Stream your favorite music from Spotify, Bluetooth, or macOS. Control playback, adjust volume, and switch sources seamlessly from your phone or computer."
-/>
 
-<SectionRemoteControl
-  tag="Remote control"
-  title="Milō in your Phone and Mac"
-  :blocks="[
+
+  <SectionRemoteControl tag="Remote control" title="Milō in your Phone and Mac" :blocks="[
     {
       image: '/src/assets/images/remote-ios.jpg',
       tag: 'iOS · Android',
@@ -51,8 +47,7 @@
       tag: 'macOS',
       title: 'Milō in your menu bar,\nlike it has always been here.'
     }
-  ]"
-/>
+  ]" />
 </template>
 
 <script>

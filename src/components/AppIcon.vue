@@ -40,25 +40,25 @@ export default {
     iconAlt() {
       return `${this.name} icon`
     },
-    iconStyle() {
-      let sizeInPx = 32
+    // iconStyle() {
+    //   let sizeInPx = 32
 
-      if (typeof this.size === 'number') {
-        sizeInPx = this.size
-      } else if (typeof this.size === 'string') {
-        switch (this.size) {
-          case 'large': sizeInPx = 72; break
-          case 'medium': sizeInPx = 64; break
-          case 'small': sizeInPx = 32; break
-          default: sizeInPx = 32
-        }
-      }
+    //   if (typeof this.size === 'number') {
+    //     sizeInPx = this.size
+    //   } else if (typeof this.size === 'string') {
+    //     switch (this.size) {
+    //       case 'large': sizeInPx = 72; break
+    //       case 'medium': sizeInPx = 64; break
+    //       case 'small': sizeInPx = 32; break
+    //       default: sizeInPx = 32
+    //     }
+    //   }
 
-      return {
-        width: `${sizeInPx}px`,
-        height: `${sizeInPx}px`
-      }
-    }
+    //   return {
+    //     width: `${sizeInPx}px`,
+    //     height: `${sizeInPx}px`
+    //   }
+    // }
   }
 }
 </script>
@@ -80,10 +80,10 @@ export default {
   object-fit: contain;
 }
 
-@media (max-aspect-ratio: 4/3) {
+/* @media (max-aspect-ratio: 4/3) {
   .app-icon[style*="72px"] {
     width: 64px !important;
     height: 64px !important;
   }
-}
+} */
 </style>
