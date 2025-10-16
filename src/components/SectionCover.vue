@@ -94,7 +94,6 @@ export default {
     grid-column: 1 / -1;
     display: flex;
     justify-content: center;
-    margin-bottom: var(--space-05);
 }
 
 .logo-image {
@@ -107,7 +106,6 @@ export default {
     grid-column: 2 / -2;
     display: flex;
     justify-content: center;
-    margin: var(--space-08);
 }
 
 .cover-image {

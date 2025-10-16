@@ -151,9 +151,7 @@ const indicatorStyle = computed(() => {
   return {
     opacity: isDockVisible.value ? '1' : '0',
     transform: `translateX(${offsetX}px)`,
-    transition: isDockVisible.value
-      ? 'opacity 0.3s ease 0.4s, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)'
-      : 'opacity 0.15s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)'
+    transition: 'all var(--transition-spring)'
   };
 });
 
@@ -424,7 +422,7 @@ onMounted(() => {
   position: absolute;
   bottom: -3vw;
   left: 50%;
-  transform: translateX(-50%) translateY(80px) scale(0.85);
+  transform: translateX(-50%) translateY(48px) scale(0.85);
   z-index: 10;
 
   border-radius: 2.7vw;
@@ -440,7 +438,7 @@ onMounted(() => {
 
   cursor: pointer;
   opacity: 0;
-  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all var(--transition-spring);
 }
 
 .dock.dock-visible {
@@ -455,10 +453,6 @@ onMounted(() => {
   padding: 1.3vw;
   background: var(--stroke-glass);
   border-radius: 2.7vw;
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
   mask-composite: exclude;
   z-index: -1;
   pointer-events: none;
@@ -474,7 +468,7 @@ onMounted(() => {
   padding: 0;
   opacity: 0;
   transform: translateY(20px) scale(0.8);
-  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all var(--transition-spring);
 }
 
 .dock-item.dock-item-visible {
@@ -499,7 +493,7 @@ onMounted(() => {
   background: var(--color-background-contrast);
   border-radius: var(--border-radius-full);
   pointer-events: none;
-  transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all var(--transition-spring);
 }
 
 /* === ANIMATED GRADIENTS === */
@@ -542,7 +536,7 @@ onMounted(() => {
 }
 
 .gradient-0 {
-  background-image: linear-gradient(rgba(255, 187, 0, 0.4), rgba(231, 162, 0, 0.24));
+  background-image: linear-gradient(rgb(216 170 44 / 40%), rgba(231, 162, 0, 0.24));
 }
 
 .gradient-1 {
@@ -576,6 +570,9 @@ onMounted(() => {
 
   .body-mono.time {
     font-size: 12px;
+  }
+    .progress-container {
+    height: 6px;
   }
 }
 
@@ -639,7 +636,7 @@ onMounted(() => {
     gap: var(--space-01);
   }
 
-  .progress-container[data-v-0c961f40] {
+  .progress-container {
     height: 4px;
   }
 
